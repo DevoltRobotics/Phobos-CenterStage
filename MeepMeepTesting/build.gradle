@@ -1,0 +1,18 @@
+plugins {
+    id 'java-library'
+    id 'org.jetbrains.kotlin.jvm'
+}
+
+repositories {
+    maven { url = 'https://jitpack.io/' }
+    maven { url = 'https://maven.brott.dev/' }
+}
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_1_7
+    targetCompatibility = JavaVersion.VERSION_1_7
+}
+
+dependencies {
+    implementation 'com.github.NoahBres:MeepMeep:2.0.3'
+}
