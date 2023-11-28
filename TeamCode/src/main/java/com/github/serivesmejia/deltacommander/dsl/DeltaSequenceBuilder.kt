@@ -7,6 +7,7 @@ import com.github.serivesmejia.deltacommander.command.DeltaSequentialCmd
 import com.github.serivesmejia.deltacommander.command.DeltaWaitCmd
 import com.github.serivesmejia.deltacommander.command.DeltaWaitConditionCmd
 import com.github.serivesmejia.deltacommander.deltaScheduler
+import com.github.serivesmejia.deltacommander.stopAfter
 import java.lang.IllegalArgumentException
 import kotlin.reflect.KClass
 
@@ -79,6 +80,15 @@ class DeltaSequenceBuilder(private val block: DeltaSequenceBuilder.() -> Unit) {
         return deltaSequence {
             - command.async()
             - waitFor { command.hasRunOnce && condition(command) }
+        }
+    }
+
+
+    inline fun <reified C: DeltaCommand> C.waitUntilWithTimeout(timeout: Double, noinline condition: C.() -> Boolean): DeltaCommand {
+        val command = this
+        return deltaSequence {
+            - command.async()
+            - waitFor { command.hasRunOnce && condition(command) }.stopAfter(timeout)
         }
     }
 

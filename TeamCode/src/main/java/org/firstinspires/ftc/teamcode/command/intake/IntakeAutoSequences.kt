@@ -5,7 +5,7 @@ import com.github.serivesmejia.deltacommander.subsystem
 import org.firstinspires.ftc.teamcode.command.intake.arm.IntakeArmGoToPositionCmd
 
 fun intakeDepositIntoBoxSequence() = deltaSequence {
-    - IntakeArmGoToPositionCmd(0).waitUntil { sub.armMotor.currentPosition >= -100 }
+    - IntakeArmGoToPositionCmd(0).waitUntil { sub.armMotor.currentPosition >= -400 }
 
     - IntakeDoorOpenCmd().async()
     - waitForSeconds(2.0)

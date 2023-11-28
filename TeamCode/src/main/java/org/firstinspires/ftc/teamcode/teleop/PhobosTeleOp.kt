@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.teleop
 import com.acmerobotics.roadrunner.geometry.Pose2d
 import com.github.serivesmejia.deltacommander.command.DeltaInstantCmd
 import com.github.serivesmejia.deltacommander.command.DeltaRunCmd
+import com.github.serivesmejia.deltacommander.stopOn
 import com.github.serivesmejia.deltaevent.gamepad.button.Button
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp
 import org.firstinspires.ftc.teamcode.PhobosOpMode
@@ -18,6 +19,7 @@ import org.firstinspires.ftc.teamcode.command.mecanum.IntakeReleaseCmd
 import org.firstinspires.ftc.teamcode.command.mecanum.IntakeStopCmd
 import org.firstinspires.ftc.teamcode.lastKnownAlliance
 import org.firstinspires.ftc.teamcode.lastKnownPose
+import kotlin.math.abs
 
 @TeleOp(name = "Francisco", group = "##PHOBOS")
 class PhobosTeleOp : PhobosOpMode() {
@@ -42,6 +44,12 @@ class PhobosTeleOp : PhobosOpMode() {
         // INTAKE ARM
 
         intakeArmSub.defaultCommand = IntakeArmDriveCmd({ -gamepad2.left_stick_y.toDouble() }, { 0.0 })
+
+        + DeltaRunCmd {
+            if(abs(-gamepad2.left_stick_y) >= 0.1) {
+                intakeArmSub.free()
+            }
+        }
 
         superGamepad2.scheduleOn(Button.DPAD_LEFT,
                 intakeDepositIntoBoxSequence()

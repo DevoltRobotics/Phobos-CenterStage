@@ -3,7 +3,7 @@ package org.firstinspires.ftc.teamcode.command.box
 import com.github.serivesmejia.deltacommander.DeltaCommand
 import org.firstinspires.ftc.teamcode.subsystem.BoxSubsystem
 
-class BoxDoorsDriveCmd(val left: () -> Boolean, val right: () -> Boolean) : DeltaCommand {
+class BoxDoorsDriveCmd(val left: () -> Boolean, val right: () -> Boolean) : DeltaCommand() {
 
     val sub = require<BoxSubsystem>()
 

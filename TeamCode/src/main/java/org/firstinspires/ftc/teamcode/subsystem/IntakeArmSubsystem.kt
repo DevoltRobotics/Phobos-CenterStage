@@ -30,7 +30,7 @@ class IntakeArmSubsystem(val armMotor: DcMotorEx, val wristServo: Servo) : Delta
     override fun loop() {
         if(!wristBusy) {
             if(armMotor.currentPosition >= -200) {
-                wristServo.position = 0.4
+                wristServo.position = 0.45
             } else {
                 wristServo.position = downWristPosition
             }
