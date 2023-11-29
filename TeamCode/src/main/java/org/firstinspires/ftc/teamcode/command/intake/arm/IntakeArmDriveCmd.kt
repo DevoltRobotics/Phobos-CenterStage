@@ -11,12 +11,21 @@ open class IntakeArmDriveCmd(val power: () -> Double, val wristPower: () -> Doub
 
     val deltaTimer = ElapsedTime()
 
-    override fun run() {
-        sub.controller.targetPosition += (power() * deltaTimer.seconds() * IntakeArmSubsystem.ticksPerSecond)
+    val positionUpdateTimer = ElapsedTime()
 
-        sub.controller.targetPosition = Range.clip(sub.controller.targetPosition, -400.0, 0.0)
+    override fun run() {
+        sub.controller.targetPosition += (power() * deltaTimer.seconds() * IntakeArmSubsystem.drivingTicksPerSecond)
+
+        sub.downWristPosition = 0.5
+
+        sub.controller.targetPosition = Range.clip(sub.controller.targetPosition, Double.NEGATIVE_INFINITY, 0.0)
 
         sub.updateController()
+
+        if(positionUpdateTimer.seconds() >= 5.0) {
+            sub.controller.targetPosition = sub.armMotor.currentPosition.toDouble()
+            positionUpdateTimer.reset()
+        }
 
         deltaTimer.reset()
     }

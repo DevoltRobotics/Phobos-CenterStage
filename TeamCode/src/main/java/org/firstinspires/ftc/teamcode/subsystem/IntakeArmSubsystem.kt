@@ -9,13 +9,14 @@ import com.qualcomm.robotcore.hardware.DcMotorEx
 import com.qualcomm.robotcore.hardware.Servo
 import org.firstinspires.ftc.teamcode.command.intake.arm.IntakeArmStopCmd
 
+@Config
 class IntakeArmSubsystem(val armMotor: DcMotorEx, val wristServo: Servo) : DeltaSubsystem() {
 
     var controller = createController()
         private set
 
     var wristBusy = false
-    var downWristPosition = 0.5
+    var downWristPosition = 0.52
 
     private var previousCoeffs = pidfCoefficients.copy()
 
@@ -28,14 +29,6 @@ class IntakeArmSubsystem(val armMotor: DcMotorEx, val wristServo: Servo) : Delta
     }
 
     override fun loop() {
-        if(!wristBusy) {
-            if(armMotor.currentPosition >= -200) {
-                wristServo.position = 0.45
-            } else {
-                wristServo.position = downWristPosition
-            }
-        }
-
         if(pidfCoefficients != previousCoeffs) {
             controller = createController()
         }
@@ -44,7 +37,7 @@ class IntakeArmSubsystem(val armMotor: DcMotorEx, val wristServo: Servo) : Delta
     }
 
     fun updateController() {
-        armMotor.power = controller.update(armMotor.currentPosition.toDouble(), armMotor.velocity)
+        armMotor.power = controller.update(armMotor.currentPosition.toDouble())
     }
 
     fun reset() {
@@ -54,15 +47,16 @@ class IntakeArmSubsystem(val armMotor: DcMotorEx, val wristServo: Servo) : Delta
 
     private fun createController() = PIDFController(pidfCoefficients, kV, kA, kStatic)
 
-    @Config
     companion object {
         @JvmStatic var pidfCoefficients = PIDCoefficients(0.01, 0.0001, 0.0001)
 
-        @JvmStatic var kV = 0.00027
-        @JvmStatic var kA = 0.00001
-        @JvmStatic var kStatic = 0.05
+        @JvmStatic var kV = 0.0
+        @JvmStatic var kA = 0.0
+        @JvmStatic var kStatic = 0.0
 
-        @JvmStatic var ticksPerSecond = 300
-        @JvmStatic var ticksPerPerSecond = 100
+        @JvmStatic var drivingTicksPerSecond = 200
+
+        @JvmStatic var ticksPerSecond = 100
+        @JvmStatic var ticksPerPerSecond = 60
     }
 }
