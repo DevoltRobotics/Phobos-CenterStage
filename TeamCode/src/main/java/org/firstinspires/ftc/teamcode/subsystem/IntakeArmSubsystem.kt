@@ -54,7 +54,7 @@ class IntakeArmSubsystem(val armMotor: DcMotorEx, val wristServo: Servo) : Delta
         @JvmStatic var kA = 0.0
         @JvmStatic var kStatic = 0.0
 
-        @JvmStatic var drivingTicksPerSecond = 200
+        @JvmStatic var drivingTicksPerSecond = 250
 
         @JvmStatic var ticksPerSecond = 100
         @JvmStatic var ticksPerPerSecond = 60
