@@ -16,7 +16,7 @@ class IntakeArmSubsystem(val armMotor: DcMotorEx, val wristServo: Servo) : Delta
         private set
 
     var wristBusy = false
-    var downWristPosition = 0.52
+    var downWristPosition = 0.53
 
     private var previousCoeffs = pidfCoefficients.copy()
 

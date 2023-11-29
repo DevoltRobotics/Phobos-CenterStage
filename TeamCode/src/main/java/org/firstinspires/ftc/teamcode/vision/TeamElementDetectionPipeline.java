@@ -22,9 +22,9 @@ public class TeamElementDetectionPipeline extends OpenCvPipeline {
     /*
      * The core values which define the location and size of the sample regions
      */
-    static final Point REGION1_TOPLEFT_ANCHOR_POINT = new Point(109,98);
-    static final Point REGION2_TOPLEFT_ANCHOR_POINT = new Point(181,98);
-    static final Point REGION3_TOPLEFT_ANCHOR_POINT = new Point(253,98);
+    static final Point REGION1_TOPLEFT_ANCHOR_POINT = new Point(20,70);
+    static final Point REGION2_TOPLEFT_ANCHOR_POINT = new Point(150,50);
+    static final Point REGION3_TOPLEFT_ANCHOR_POINT = new Point(300,60);
     static final int REGION_WIDTH = 20;
     static final int REGION_HEIGHT = 20;
 
@@ -81,8 +81,8 @@ public class TeamElementDetectionPipeline extends OpenCvPipeline {
      */
     void inputToCb(Mat input)
     {
-        Imgproc.cvtColor(input, YCrCb, Imgproc.COLOR_RGB2YCrCb);
-        Core.extractChannel(YCrCb, Cb, 2);
+        Imgproc.cvtColor(input, YCrCb, Imgproc.COLOR_RGB2HSV);
+        Core.extractChannel(YCrCb, Cb, 0);
     }
 
     @Override

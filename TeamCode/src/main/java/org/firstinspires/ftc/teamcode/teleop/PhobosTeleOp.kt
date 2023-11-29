@@ -14,6 +14,7 @@ import org.firstinspires.ftc.teamcode.command.box.*
 import org.firstinspires.ftc.teamcode.command.intake.IntakeDoorCloseCmd
 import org.firstinspires.ftc.teamcode.command.intake.IntakeDoorOpenCmd
 import org.firstinspires.ftc.teamcode.command.intake.arm.IntakeArmDriveCmd
+import org.firstinspires.ftc.teamcode.command.intake.arm.IntakeArmGoToPositionCmd
 import org.firstinspires.ftc.teamcode.command.intake.arm.IntakeArmWristPositionCmd
 import org.firstinspires.ftc.teamcode.command.intake.intakeDepositIntoBoxSequence
 import org.firstinspires.ftc.teamcode.command.lift.LiftDriveCmd
@@ -58,6 +59,10 @@ class PhobosTeleOp : PhobosOpMode() {
             }
         }
 
+        superGamepad2.scheduleOn(Button.DPAD_UP,
+                IntakeArmGoToPositionCmd(0)
+        )
+
         superGamepad2.scheduleOn(Button.DPAD_LEFT,
                 intakeDepositIntoBoxSequence()
         )
@@ -71,7 +76,7 @@ class PhobosTeleOp : PhobosOpMode() {
 
         superGamepad2.toggleScheduleOn(Button.B,
                 IntakeArmWristPositionCmd(0.42).endRightAway(),
-                IntakeArmWristPositionCmd(0.5).endRightAway()
+                IntakeArmWristPositionCmd(0.53).endRightAway()
         )
 
         superGamepad1.scheduleOn(Button.A,
