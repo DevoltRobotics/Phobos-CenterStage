@@ -3,32 +3,29 @@ package org.firstinspires.ftc.teamcode.teleop
 import com.acmerobotics.roadrunner.geometry.Pose2d
 import com.github.serivesmejia.deltacommander.command.DeltaInstantCmd
 import com.github.serivesmejia.deltacommander.command.DeltaRunCmd
-import com.github.serivesmejia.deltacommander.dsl.deltaSequence
-import com.github.serivesmejia.deltacommander.dsl.deltaSequenceInstant
 import com.github.serivesmejia.deltacommander.endRightAway
-import com.github.serivesmejia.deltacommander.stopOn
 import com.github.serivesmejia.deltaevent.gamepad.button.Button
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp
 import org.firstinspires.ftc.teamcode.PhobosOpMode
-import org.firstinspires.ftc.teamcode.command.box.*
+import org.firstinspires.ftc.teamcode.command.box.BoxArmDownCmd
+import org.firstinspires.ftc.teamcode.command.box.BoxArmDriveCmd
+import org.firstinspires.ftc.teamcode.command.box.BoxArmPositionCmd
+import org.firstinspires.ftc.teamcode.command.box.BoxDoorsDriveCmd
 import org.firstinspires.ftc.teamcode.command.intake.IntakeDoorCloseCmd
 import org.firstinspires.ftc.teamcode.command.intake.IntakeDoorOpenCmd
 import org.firstinspires.ftc.teamcode.command.intake.arm.IntakeArmDriveCmd
 import org.firstinspires.ftc.teamcode.command.intake.arm.IntakeArmGoToPositionCmd
 import org.firstinspires.ftc.teamcode.command.intake.arm.IntakeArmWristPositionCmd
-import org.firstinspires.ftc.teamcode.command.intake.intakeDepositIntoBoxSequence
 import org.firstinspires.ftc.teamcode.command.lift.LiftDriveCmd
-import org.firstinspires.ftc.teamcode.command.lift.LiftGoToPositionCmd
 import org.firstinspires.ftc.teamcode.command.mecanum.FieldCentricMecanumCmd
 import org.firstinspires.ftc.teamcode.command.mecanum.IntakeAbsorbCmd
 import org.firstinspires.ftc.teamcode.command.mecanum.IntakeReleaseCmd
 import org.firstinspires.ftc.teamcode.command.mecanum.IntakeStopCmd
 import org.firstinspires.ftc.teamcode.lastKnownAlliance
 import org.firstinspires.ftc.teamcode.lastKnownPose
-import org.firstinspires.ftc.teamcode.subsystem.LiftSubsystem
 import kotlin.math.abs
 
-@TeleOp(name = "Francisco", group = "##PHOBOS")
+@TeleOp(name = "Carlos", group = "##PHOBOS")
 class PhobosTeleOp : PhobosOpMode() {
 
     override fun setup() {
@@ -47,37 +44,7 @@ class PhobosTeleOp : PhobosOpMode() {
 
         + FieldCentricMecanumCmd(gamepad1)
 
-        /* START B */
-
-        // INTAKE ARM
-
-        intakeArmSub.defaultCommand = IntakeArmDriveCmd({ -gamepad2.left_stick_y.toDouble() }, { 0.0 })
-
-        + DeltaRunCmd {
-            if(abs(-gamepad2.left_stick_y) >= 0.1) {
-                intakeArmSub.free()
-            }
-        }
-
-        superGamepad2.scheduleOn(Button.DPAD_UP,
-                IntakeArmGoToPositionCmd(0)
-        )
-
-        superGamepad2.scheduleOn(Button.DPAD_LEFT,
-                intakeDepositIntoBoxSequence()
-        )
-
         // INTAKE
-
-        superGamepad2.scheduleOn(Button.A,
-                IntakeDoorOpenCmd(),
-                IntakeDoorCloseCmd()
-        )
-
-        superGamepad2.toggleScheduleOn(Button.B,
-                IntakeArmWristPositionCmd(0.42).endRightAway(),
-                IntakeArmWristPositionCmd(0.53).endRightAway()
-        )
 
         superGamepad1.scheduleOn(Button.A,
                 IntakeAbsorbCmd(),
@@ -99,9 +66,32 @@ class PhobosTeleOp : PhobosOpMode() {
                 IntakeStopCmd()
         )
 
-        superGamepad1.scheduleOn(Button.LEFT_STICK_BUTTON,
+        /* START B */
+
+        // INTAKE ARM
+
+        intakeArmSub.defaultCommand = IntakeArmDriveCmd({ -gamepad2.left_stick_y.toDouble() }, { 0.0 })
+
+        + DeltaRunCmd {
+            if(abs(-gamepad2.left_stick_y) >= 0.1) {
+                intakeArmSub.free()
+            }
+        }
+
+        superGamepad2.scheduleOn(Button.DPAD_LEFT,
+                IntakeArmGoToPositionCmd(0)
+        )
+
+        // INTAKE
+
+        superGamepad2.scheduleOn(Button.A,
                 IntakeDoorOpenCmd(),
                 IntakeDoorCloseCmd()
+        )
+
+        superGamepad2.toggleScheduleOn(Button.B,
+                IntakeArmWristPositionCmd(0.42).endRightAway(),
+                IntakeArmWristPositionCmd(0.53).endRightAway()
         )
 
         // LIFT
@@ -115,7 +105,7 @@ class PhobosTeleOp : PhobosOpMode() {
         }
 
         superGamepad2.scheduleOnPress(Button.DPAD_RIGHT,
-                BoxArmPositionCmd(0.7)
+                BoxArmPositionCmd(0.42)
         )
 
         superGamepad2.scheduleOnPress(Button.DPAD_DOWN,

@@ -25,6 +25,8 @@ class PhobosHardware : SimpleHardware() {
     val depositLeft by hardware<Servo>("dl")
     val depositRight by hardware<Servo>("dr")
 
+    val planeLauncher by hardware<Servo>("pl")
+
     override fun init() {
         intake.gobilda()
         intakeDoor.gobilda()
@@ -35,14 +37,8 @@ class PhobosHardware : SimpleHardware() {
 
         depositLeft.gobilda()
         depositRight.gobilda()
-    }
 
-    // squeezing out extra degrees from gobilda servos
-    fun PwmControl.gobilda() {
-        pwmRange = PwmControl.PwmRange(500.0, 2500.0)
+        planeLauncher.gobilda()
     }
-
-    fun Servo.gobilda() = (this as PwmControl).gobilda()
-    fun CRServo.gobilda() = (this as PwmControl).gobilda()
 
 }

@@ -22,7 +22,7 @@ open class IntakeArmDriveCmd(val power: () -> Double, val wristPower: () -> Doub
 
         sub.updateController()
 
-        if(positionUpdateTimer.seconds() >= 5.0) {
+        if(positionUpdateTimer.seconds() >= 3.0) {
             sub.controller.targetPosition = sub.armMotor.currentPosition.toDouble()
             positionUpdateTimer.reset()
         }

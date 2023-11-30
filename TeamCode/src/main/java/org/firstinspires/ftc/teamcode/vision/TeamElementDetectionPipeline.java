@@ -1,7 +1,5 @@
 package org.firstinspires.ftc.teamcode.vision;
 
-import com.acmerobotics.dashboard.config.Config;
-
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
 import org.opencv.core.Point;
@@ -10,8 +8,9 @@ import org.opencv.core.Scalar;
 import org.opencv.imgproc.Imgproc;
 import org.openftc.easyopencv.OpenCvPipeline;
 
-@Config
 public class TeamElementDetectionPipeline extends OpenCvPipeline {
+
+    enum Pattern { A, B, C }
 
     /*
      * Some color constants
@@ -24,7 +23,9 @@ public class TeamElementDetectionPipeline extends OpenCvPipeline {
      */
     static final Point REGION1_TOPLEFT_ANCHOR_POINT = new Point(20,70);
     static final Point REGION2_TOPLEFT_ANCHOR_POINT = new Point(150,50);
-    static final Point REGION3_TOPLEFT_ANCHOR_POINT = new Point(300,60);
+
+    static final double MIN_HUE = 100;
+
     static final int REGION_WIDTH = 20;
     static final int REGION_HEIGHT = 20;
 
@@ -57,20 +58,15 @@ public class TeamElementDetectionPipeline extends OpenCvPipeline {
     Point region2_pointB = new Point(
             REGION2_TOPLEFT_ANCHOR_POINT.x + REGION_WIDTH,
             REGION2_TOPLEFT_ANCHOR_POINT.y + REGION_HEIGHT);
-    Point region3_pointA = new Point(
-            REGION3_TOPLEFT_ANCHOR_POINT.x,
-            REGION3_TOPLEFT_ANCHOR_POINT.y);
-    Point region3_pointB = new Point(
-            REGION3_TOPLEFT_ANCHOR_POINT.x + REGION_WIDTH,
-            REGION3_TOPLEFT_ANCHOR_POINT.y + REGION_HEIGHT);
 
     /*
      * Working variables
      */
-    Mat region1_Cb, region2_Cb, region3_Cb;
+    Mat region1_Cb, region2_Cb;
     Mat YCrCb = new Mat();
     Mat Cb = new Mat();
-    int avg1, avg2, avg3;
+
+    int avg1, avg2;
 
     // Volatile since accessed by OpMode thread w/o synchronization
     private volatile Pattern position = Pattern.A;
@@ -106,7 +102,6 @@ public class TeamElementDetectionPipeline extends OpenCvPipeline {
          */
         region1_Cb = Cb.submat(new Rect(region1_pointA, region1_pointB));
         region2_Cb = Cb.submat(new Rect(region2_pointA, region2_pointB));
-        region3_Cb = Cb.submat(new Rect(region3_pointA, region3_pointB));
     }
 
     @Override
@@ -161,7 +156,6 @@ public class TeamElementDetectionPipeline extends OpenCvPipeline {
          */
         avg1 = (int) Core.mean(region1_Cb).val[0];
         avg2 = (int) Core.mean(region2_Cb).val[0];
-        avg3 = (int) Core.mean(region3_Cb).val[0];
 
         /*
          * Draw a rectangle showing sample region 1 on the screen.
@@ -186,28 +180,15 @@ public class TeamElementDetectionPipeline extends OpenCvPipeline {
                 2); // Thickness of the rectangle lines
 
         /*
-         * Draw a rectangle showing sample region 3 on the screen.
-         * Simply a visual aid. Serves no functional purpose.
-         */
-        Imgproc.rectangle(
-                input, // Buffer to draw on
-                region3_pointA, // First point which defines the rectangle
-                region3_pointB, // Second point which defines the rectangle
-                BLUE, // The color the rectangle is drawn in
-                2); // Thickness of the rectangle lines
-
-
-        /*
          * Find the max of the 3 averages
          */
-        int maxOneTwo = Math.max(avg1, avg2);
-        int max = Math.max(maxOneTwo, avg3);
+        int max = Math.max(avg1, avg2);
 
         /*
          * Now that we found the max, we actually need to go and
          * figure out which sample region that value was from
          */
-        if(max == avg1) // Was it from region 1?
+        if(max == avg1 && avg1 >= MIN_HUE) // Was it from region 1?
         {
             position = Pattern.A; // Record our analysis
 
@@ -222,7 +203,7 @@ public class TeamElementDetectionPipeline extends OpenCvPipeline {
                     GREEN, // The color the rectangle is drawn in
                     -1); // Negative thickness means solid fill
         }
-        else if(max == avg2) // Was it from region 2?
+        else if(max == avg2 && avg2 >= MIN_HUE) // Was it from region 2?
         {
             position = Pattern.B; // Record our analysis
 
@@ -237,20 +218,9 @@ public class TeamElementDetectionPipeline extends OpenCvPipeline {
                     GREEN, // The color the rectangle is drawn in
                     -1); // Negative thickness means solid fill
         }
-        else if(max == avg3) // Was it from region 3?
+        else // Was it from region 3?
         {
             position = Pattern.C; // Record our analysis
-
-            /*
-             * Draw a solid rectangle on top of the chosen region.
-             * Simply a visual aid. Serves no functional purpose.
-             */
-            Imgproc.rectangle(
-                    input, // Buffer to draw on
-                    region3_pointA, // First point which defines the rectangle
-                    region3_pointB, // Second point which defines the rectangle
-                    GREEN, // The color the rectangle is drawn in
-                    -1); // Negative thickness means solid fill
         }
 
         /*

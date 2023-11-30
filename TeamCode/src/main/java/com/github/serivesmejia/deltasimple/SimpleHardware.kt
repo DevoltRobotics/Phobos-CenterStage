@@ -1,6 +1,9 @@
 package com.github.serivesmejia.deltasimple
 
+import com.qualcomm.robotcore.hardware.CRServo
 import com.qualcomm.robotcore.hardware.HardwareMap
+import com.qualcomm.robotcore.hardware.PwmControl
+import com.qualcomm.robotcore.hardware.Servo
 
 abstract class SimpleHardware {
 
@@ -18,5 +21,13 @@ abstract class SimpleHardware {
         hardwareMap.get(T::class.java, name)!!
     }
 
+
+    // squeezing out extra degrees from gobilda servos
+    fun PwmControl.gobilda() {
+        pwmRange = PwmControl.PwmRange(500.0, 2500.0)
+    }
+
+    fun Servo.gobilda() = (this as PwmControl).gobilda()
+    fun CRServo.gobilda() = (this as PwmControl).gobilda()
 
 }
