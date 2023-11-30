@@ -2,10 +2,14 @@ package org.firstinspires.ftc.teamcode.auto
 
 import com.acmerobotics.dashboard.FtcDashboard
 import com.acmerobotics.roadrunner.geometry.Pose2d
+import com.github.serivesmejia.deltacommander.command.DeltaRunCmd
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName
 import org.firstinspires.ftc.teamcode.Alliance
 import org.firstinspires.ftc.teamcode.PhobosOpMode
+import org.firstinspires.ftc.teamcode.command.mecanum.IntakeRunCmd
 import org.firstinspires.ftc.teamcode.command.mecanum.TrajectorySequenceCmd
+import org.firstinspires.ftc.teamcode.lastKnownAlliance
+import org.firstinspires.ftc.teamcode.lastKnownPose
 import org.firstinspires.ftc.teamcode.rr.trajectorysequence.TrajectorySequence
 import org.firstinspires.ftc.teamcode.vision.Pattern
 import org.firstinspires.ftc.teamcode.vision.TeamElementDetectionPipeline
@@ -17,6 +21,7 @@ import org.openftc.easyopencv.OpenCvWebcam
 abstract class PhobosAuto(val alliance: Alliance) : PhobosOpMode() {
 
     val drive get() = hardware.drive
+
     open val startPose = Pose2d()
 
     val pipeline = TeamElementDetectionPipeline()
@@ -25,6 +30,8 @@ abstract class PhobosAuto(val alliance: Alliance) : PhobosOpMode() {
         private set
 
     override fun setup() {
+        intakeArmSub.reset()
+
         camera = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName::class.java, "Webcam 1"))
 
         camera.openCameraDeviceAsync(object: AsyncCameraOpenListener {
@@ -45,7 +52,18 @@ abstract class PhobosAuto(val alliance: Alliance) : PhobosOpMode() {
 
         drive.poseEstimate = startPose
 
-        + TrajectorySequenceCmd(sequence(pipeline.analysis))
+        drive.followTrajectorySequenceAsync(sequence(pipeline.analysis))
+
+        + DeltaRunCmd {
+            lastKnownAlliance = alliance
+            lastKnownPose = drive.poseEstimate
+
+            telemetry.addData("arm", hardware.intakeArm.power)
+            telemetry.addData("arm target", intakeArmSub.controller.targetPosition)
+            telemetry.addData("arm pos", hardware.intakeArm.currentPosition)
+
+            telemetry.update()
+        }
     }
 
     abstract fun sequence(pattern: Pattern) : TrajectorySequence

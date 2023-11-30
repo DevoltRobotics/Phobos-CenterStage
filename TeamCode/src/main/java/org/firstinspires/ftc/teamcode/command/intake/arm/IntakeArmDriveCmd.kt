@@ -39,7 +39,6 @@ open class IntakeArmDriveCmd(val power: () -> Double, val wristPower: () -> Doub
 class IntakeArmStopCmd : IntakeArmDriveCmd({ 0.0 }, { 0.0 }) {
     override fun run() {
         sub.downWristPosition = 0.5
-
         super.run()
     }
 }

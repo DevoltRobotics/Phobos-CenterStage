@@ -11,19 +11,22 @@ open class IntakeArmGoToPositionCmd(val position: Int) : DeltaCommand() {
 
     val sub = require<IntakeArmSubsystem>()
 
-    val timer = ElapsedTime()
+    private var t = 0.0
 
-    private var start = 0
+    private var start: Double? = null
 
     override fun init() {
-        timer.reset()
-        start = sub.armMotor.currentPosition
     }
 
     override fun run() {
-        val t = timer.seconds()
+        if(start == null) {
+            start = sub.armMotor.currentPosition.toDouble();
+        }
 
-        sub.controller.targetPosition = Range.clip(lerp(start.toDouble(), position.toDouble(), t), start.toDouble(), position.toDouble())
+        t += 1.0
+        t = Range.clip(t, 0.0, 60.0)
+
+        sub.controller.targetPosition = lerp(start!!, position.toDouble(), t / 60)
 
         sub.updateController()
     }

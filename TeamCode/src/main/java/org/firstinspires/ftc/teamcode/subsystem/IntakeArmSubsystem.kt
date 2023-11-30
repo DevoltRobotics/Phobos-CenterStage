@@ -15,13 +15,11 @@ class IntakeArmSubsystem(val armMotor: DcMotorEx, val wristServo: Servo) : Delta
     var controller = createController()
         private set
 
-    var wristBusy = false
     var downWristPosition = 0.53
 
     private var previousCoeffs = pidfCoefficients.copy()
 
     init {
-        defaultCommand = IntakeArmStopCmd()
     }
 
     override fun init() {
@@ -29,11 +27,6 @@ class IntakeArmSubsystem(val armMotor: DcMotorEx, val wristServo: Servo) : Delta
     }
 
     override fun loop() {
-        if(pidfCoefficients != previousCoeffs) {
-            controller = createController()
-        }
-
-        previousCoeffs = pidfCoefficients.copy()
     }
 
     fun updateController() {
