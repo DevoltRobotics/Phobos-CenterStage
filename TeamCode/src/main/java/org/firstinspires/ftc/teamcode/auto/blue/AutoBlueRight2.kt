@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.auto.red
+package org.firstinspires.ftc.teamcode.auto.blue
 
 import com.acmerobotics.roadrunner.geometry.Pose2d
 import com.acmerobotics.roadrunner.geometry.Vector2d
@@ -19,35 +19,35 @@ import org.firstinspires.ftc.teamcode.command.mecanum.IntakeStopCmd
 import org.firstinspires.ftc.teamcode.rr.trajectorysequence.TrajectorySequenceBuilder
 import org.firstinspires.ftc.teamcode.vision.Pattern
 
-@Autonomous(name = "R - Izquierda 2 PX", group ="###RFINAL")
-class AutoRedLeft2 : PhobosAuto(Alliance.RED) {
+@Autonomous(name = "A - Derecha 2 PX", group ="###AFINAL")
+class AutoBlueRight2 : PhobosAuto(Alliance.BLUE) {
 
-    override val startPose = Pose2d(-36.0, -59.0, Math.toRadians(90.0))
+    override val startPose = Pose2d(-36.0, 59.0, Math.toRadians(270.0))
 
     override fun sequence(pattern: Pattern) = drive.trajectorySequenceBuilder(startPose).apply {
         when(pattern) {
-            Pattern.A -> path( // A
-                spikeMarkAlignPose = Pose2d(-36.5, -16.0, Math.toRadians(235.0)),
-                pixelSpikeLeavePose = Pose2d(-36.5, -10.0, Math.toRadians(200.0)),
-                backdropScorePose = Pose2d(56.5, -24.0, Math.toRadians(180.0)),
-                parkVector = Vector2d(54.0, -25.0)
-            )
-
-            Pattern.B -> path( // B
-                spikeMarkAlignPose = Pose2d(-35.0, -9.0, Math.toRadians(270.0)),
-                pixelSpikeLeavePose = Pose2d(-35.0, -8.0, Math.toRadians(200.0)),
-                backdropScorePose = Pose2d(56.5, -31.0, Math.toRadians(180.0)),
-                parkVector = Vector2d(54.0, -26.0)
-            )
-
-            Pattern.C -> path( // C
-                spikeMarkAlignPose = Pose2d(-33.5, -32.0, Math.toRadians(0.0)),
+            Pattern.A -> path( // C
+                spikeMarkAlignPose = Pose2d(-33.5, 32.0, Math.toRadians(0.0)),
                 armDownTimeOffset = 0.0,
                 waitBeforeFirstDrive = 0.8,
 
-                pixelSpikeLeavePose = Pose2d(-53.0, -8.0, Math.toRadians(0.0)),
-                backdropScorePose = Pose2d(55.5, -40.0, Math.toRadians(180.0)),
-                parkVector = Vector2d(53.0, -25.0)
+                pixelSpikeLeavePose = Pose2d(-45.0, 5.0, Math.toRadians(0.0)),
+                backdropScorePose = Pose2d(54.5, 39.0, Math.toRadians(180.0)),
+                parkVector = Vector2d(53.0, 25.0)
+            )
+
+            Pattern.B -> path( // B
+                spikeMarkAlignPose = Pose2d(-35.0, 9.0, Math.toRadians(90.0)),
+                pixelSpikeLeavePose = Pose2d(-35.0, 6.0, Math.toRadians(91.0)),
+                backdropScorePose = Pose2d(54.5, 30.0, Math.toRadians(180.0)),
+                parkVector = Vector2d(54.0, 26.0)
+            )
+
+            Pattern.C -> path( // A
+                spikeMarkAlignPose = Pose2d(-36.5, 16.0, Math.toRadians(50.0)),
+                pixelSpikeLeavePose = Pose2d(-36.5, 10.0, Math.toRadians(20.0)),
+                backdropScorePose = Pose2d(56.5, 24.0, Math.toRadians(180.0)),
+                parkVector = Vector2d(54.0, 25.0)
             )
         }
     }.build()
@@ -88,12 +88,12 @@ class AutoRedLeft2 : PhobosAuto(Alliance.RED) {
         lineToLinearHeading(pixelSpikeLeavePose)
         waitSeconds(2.0)
 
-        lineToLinearHeading(Pose2d(20.0, -7.0, Math.toRadians(180.0)))
+        lineToLinearHeading(Pose2d(20.0, 7.0, Math.toRadians(180.0)))
 
         UNSTABLE_addTemporalMarkerOffset(2.0) {
             + deltaSequence {
                 - LiftDriveCmd { 1.0 }.async()
-                - waitForSeconds(0.15)
+                - waitForSeconds(0.3)
                 - LiftDriveCmd { 0.0 }.async()
 
                 - waitForSeconds(1.0)

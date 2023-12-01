@@ -26,7 +26,7 @@ open class IntakeArmGoToPositionCmd(val position: Int) : DeltaCommand() {
         t += 1.0
         t = Range.clip(t, 0.0, 60.0)
 
-        sub.controller.targetPosition = lerp(start!!, position.toDouble(), t / 60)
+        sub.controller.targetPosition = lerp(start!!, position.toDouble(), t / 50)
 
         sub.updateController()
     }

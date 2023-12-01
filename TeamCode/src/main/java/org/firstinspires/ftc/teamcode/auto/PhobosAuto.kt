@@ -9,6 +9,9 @@ import org.firstinspires.ftc.teamcode.PhobosOpMode
 import org.firstinspires.ftc.teamcode.lastKnownAlliance
 import org.firstinspires.ftc.teamcode.lastKnownPose
 import org.firstinspires.ftc.teamcode.rr.trajectorysequence.TrajectorySequence
+import org.firstinspires.ftc.teamcode.vision.BlueTeamElementDetectionPipeline
+import org.firstinspires.ftc.teamcode.vision.Pattern
+import org.firstinspires.ftc.teamcode.vision.RedTeamElementDetectionPipeline
 import org.firstinspires.ftc.teamcode.vision.TeamElementDetectionPipeline
 import org.openftc.easyopencv.OpenCvCamera.AsyncCameraOpenListener
 import org.openftc.easyopencv.OpenCvCameraFactory
@@ -21,7 +24,7 @@ abstract class PhobosAuto(val alliance: Alliance) : PhobosOpMode() {
 
     open val startPose = Pose2d()
 
-    val pipeline = TeamElementDetectionPipeline()
+    lateinit var pipeline: TeamElementDetectionPipeline
 
     lateinit var camera: OpenCvWebcam
         private set
@@ -31,10 +34,17 @@ abstract class PhobosAuto(val alliance: Alliance) : PhobosOpMode() {
 
         camera = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName::class.java, "Webcam 1"))
 
+        pipeline = when(alliance) {
+            Alliance.RED -> RedTeamElementDetectionPipeline()
+            Alliance.BLUE -> BlueTeamElementDetectionPipeline()
+        }
+
+        camera.setPipeline(pipeline)
+        camera.setMillisecondsPermissionTimeout(4000)
+
         camera.openCameraDeviceAsync(object: AsyncCameraOpenListener {
             override fun onOpened() {
-                camera.setPipeline(pipeline)
-                camera.startStreaming(320, 240, OpenCvCameraRotation.UPSIDE_DOWN)
+                camera.startStreaming(320, 240, OpenCvCameraRotation.UPRIGHT)
 
                 FtcDashboard.getInstance().startCameraStream(camera, 0.0)
             }
@@ -42,6 +52,11 @@ abstract class PhobosAuto(val alliance: Alliance) : PhobosOpMode() {
             override fun onError(errorCode: Int) {
             }
         })
+    }
+
+    override fun initializeUpdate() {
+        telemetry.addData("Pattern", pipeline.analysis)
+        telemetry.update()
     }
 
     override fun begin() {

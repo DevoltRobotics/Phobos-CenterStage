@@ -19,8 +19,8 @@ import org.firstinspires.ftc.teamcode.command.mecanum.IntakeStopCmd
 import org.firstinspires.ftc.teamcode.rr.trajectorysequence.TrajectorySequenceBuilder
 import org.firstinspires.ftc.teamcode.vision.Pattern
 
-@Autonomous(name = "R - Izquierda 2 PX", group ="###RFINAL")
-class AutoRedLeft2 : PhobosAuto(Alliance.RED) {
+@Autonomous(name = "R - Izquierda 1 PX", group ="###RFINAL")
+class AutoRedLeft1 : PhobosAuto(Alliance.RED) {
 
     override val startPose = Pose2d(-36.0, -59.0, Math.toRadians(90.0))
 
@@ -87,39 +87,6 @@ class AutoRedLeft2 : PhobosAuto(Alliance.RED) {
         waitSeconds(0.8)
         lineToLinearHeading(pixelSpikeLeavePose)
         waitSeconds(2.0)
-
-        lineToLinearHeading(Pose2d(20.0, -7.0, Math.toRadians(180.0)))
-
-        UNSTABLE_addTemporalMarkerOffset(2.0) {
-            + deltaSequence {
-                - LiftDriveCmd { 1.0 }.async()
-                - waitForSeconds(0.15)
-                - LiftDriveCmd { 0.0 }.async()
-
-                - waitForSeconds(1.0)
-
-                - BoxArmPositionCmd(0.42).async()
-
-                - waitForSeconds(1.0)
-
-                - BoxLeftDoorOpenCmd().async()
-
-                - waitForSeconds(2.0)
-
-                - BoxLeftDoorCloseCmd().async()
-                - BoxArmDownCmd().async()
-
-                - LiftDriveCmd { -0.5 }.async()
-                - waitForSeconds(5.0)
-                - LiftDriveCmd { 0.0 }.async()
-            }
-        }
-
-        lineToSplineHeading(backdropScorePose)
-
-        waitSeconds(6.0)
-
-        lineTo(parkVector)
     }
 
 }
