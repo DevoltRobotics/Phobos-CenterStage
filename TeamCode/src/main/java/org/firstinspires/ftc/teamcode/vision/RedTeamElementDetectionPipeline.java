@@ -19,10 +19,10 @@ public class RedTeamElementDetectionPipeline extends TeamElementDetectionPipelin
     static final Scalar BLUE = new Scalar(0, 0, 255);
     static final Scalar GREEN = new Scalar(0, 255, 0);
 
-    public static int region1X = 15;
-    public static int region1Y = 40;
+    public static int region1X = 4;
+    public static int region1Y = 45;
 
-    public static int region2X = 175;
+    public static int region2X = 115;
     public static int region2Y = 25;
 
     /*
@@ -65,11 +65,11 @@ public class RedTeamElementDetectionPipeline extends TeamElementDetectionPipelin
             REGION2_TOPLEFT_ANCHOR_POINT.y + REGION_HEIGHT);
 
     public static double hMin = 0;
-    public static double sMin = 150;
+    public static double sMin = 135;
     public static double vMin = 0;
 
-    public static double hMax = 160;
-    public static double sMax = 255;
+    public static double hMax = 255;
+    public static double sMax = 200;
     public static double vMax = 255;
 
     static Scalar redHsvMin = new Scalar(hMin, sMin, vMin, 0);

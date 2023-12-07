@@ -66,6 +66,11 @@ class PhobosTeleOp : PhobosOpMode() {
                 IntakeStopCmd()
         )
 
+        superGamepad1.scheduleOn(Button.X,
+            DeltaInstantCmd { hardware.planeLauncher.position = 1.0 },
+            DeltaInstantCmd { hardware.planeLauncher.position = 0.0 }
+        )
+
         /* START B */
 
         // INTAKE ARM

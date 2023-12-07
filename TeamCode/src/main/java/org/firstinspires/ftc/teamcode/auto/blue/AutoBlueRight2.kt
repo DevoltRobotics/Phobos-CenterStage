@@ -27,7 +27,7 @@ class AutoBlueRight2 : PhobosAuto(Alliance.BLUE) {
     override fun sequence(pattern: Pattern) = drive.trajectorySequenceBuilder(startPose).apply {
         when(pattern) {
             Pattern.A -> path( // C
-                spikeMarkAlignPose = Pose2d(-33.5, 32.0, Math.toRadians(0.0)),
+                spikeMarkAlignPose = Pose2d(-33.5, 30.0, Math.toRadians(0.0)),
                 armDownTimeOffset = 0.0,
                 waitBeforeFirstDrive = 0.8,
 
@@ -38,16 +38,16 @@ class AutoBlueRight2 : PhobosAuto(Alliance.BLUE) {
 
             Pattern.B -> path( // B
                 spikeMarkAlignPose = Pose2d(-35.0, 9.0, Math.toRadians(90.0)),
-                pixelSpikeLeavePose = Pose2d(-35.0, 6.0, Math.toRadians(91.0)),
+                pixelSpikeLeavePose = Pose2d(-35.0, 4.0, Math.toRadians(91.0)),
                 backdropScorePose = Pose2d(54.5, 30.0, Math.toRadians(180.0)),
                 parkVector = Vector2d(54.0, 26.0)
             )
 
             Pattern.C -> path( // A
-                spikeMarkAlignPose = Pose2d(-36.5, 16.0, Math.toRadians(50.0)),
-                pixelSpikeLeavePose = Pose2d(-36.5, 10.0, Math.toRadians(20.0)),
-                backdropScorePose = Pose2d(56.5, 24.0, Math.toRadians(180.0)),
-                parkVector = Vector2d(54.0, 25.0)
+                spikeMarkAlignPose = Pose2d(-34.0, 17.0, Math.toRadians(135.0)),
+                pixelSpikeLeavePose = Pose2d(-35.0, 7.0, Math.toRadians(140.0)),
+                backdropScorePose = Pose2d(56.5, 23.0, Math.toRadians(180.0)),
+                parkVector = Vector2d(54.0, 23.0)
             )
         }
     }.build()
@@ -66,7 +66,7 @@ class AutoBlueRight2 : PhobosAuto(Alliance.BLUE) {
         }
 
         UNSTABLE_addTemporalMarkerOffset(armDownTimeOffset) {
-            + IntakeArmGoToPositionCmd(-230)
+            + IntakeArmGoToPositionCmd(-240)
         }
 
         if(waitBeforeFirstDrive != null && waitBeforeFirstDrive > 0.0) {
@@ -93,7 +93,7 @@ class AutoBlueRight2 : PhobosAuto(Alliance.BLUE) {
         UNSTABLE_addTemporalMarkerOffset(2.0) {
             + deltaSequence {
                 - LiftDriveCmd { 1.0 }.async()
-                - waitForSeconds(0.3)
+                - waitForSeconds(0.2)
                 - LiftDriveCmd { 0.0 }.async()
 
                 - waitForSeconds(1.0)

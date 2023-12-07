@@ -22,7 +22,7 @@ public class BlueTeamElementDetectionPipeline extends TeamElementDetectionPipeli
     public static int region1X = 50;
     public static int region1Y = 40;
 
-    public static int region2X = 168;
+    public static int region2X = 190;
     public static int region2Y = 40;
 
     /*
@@ -65,11 +65,11 @@ public class BlueTeamElementDetectionPipeline extends TeamElementDetectionPipeli
             REGION2_TOPLEFT_ANCHOR_POINT.y + REGION_HEIGHT);
 
     public static double hMin = 0;
-    public static double sMin = 5;
+    public static double sMin = 50;
     public static double vMin = 0;
 
-    public static double hMax = 200;
-    public static double sMax = 100;
+    public static double hMax = 255;
+    public static double sMax = 120;
     public static double vMax = 255;
 
     static Scalar redHsvMin = new Scalar(hMin, sMin, vMin, 0);
@@ -181,7 +181,7 @@ public class BlueTeamElementDetectionPipeline extends TeamElementDetectionPipeli
          */
         if(avg1 >= (100f)) // Was it from region 1?
         {
-            position = Pattern.A; // Record our analysis
+            position = Pattern.B; // Record our analysis
 
             /*
              * Draw a solid rectangle on top of the chosen region.
@@ -196,7 +196,7 @@ public class BlueTeamElementDetectionPipeline extends TeamElementDetectionPipeli
         }
         else if(avg2  >= (100f)) // Was it from region 2?
         {
-            position = Pattern.B; // Record our analysis
+            position = Pattern.C; // Record our analysis
 
             /*
              * Draw a solid rectangle on top of the chosen region.
@@ -211,7 +211,7 @@ public class BlueTeamElementDetectionPipeline extends TeamElementDetectionPipeli
         }
         else // Was it from region 3?
         {
-            position = Pattern.C; // Record our analysis
+            position = Pattern.A; // Record our analysis
         }
 
         /*

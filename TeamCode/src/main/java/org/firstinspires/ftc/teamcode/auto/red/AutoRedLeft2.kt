@@ -28,26 +28,26 @@ class AutoRedLeft2 : PhobosAuto(Alliance.RED) {
         when(pattern) {
             Pattern.A -> path( // A
                 spikeMarkAlignPose = Pose2d(-36.5, -16.0, Math.toRadians(235.0)),
-                pixelSpikeLeavePose = Pose2d(-36.5, -10.0, Math.toRadians(200.0)),
+                pixelSpikeLeavePose = Pose2d(-36.5, -8.0, Math.toRadians(215.0)),
                 backdropScorePose = Pose2d(56.5, -24.0, Math.toRadians(180.0)),
-                parkVector = Vector2d(54.0, -25.0)
+                parkVector = Vector2d(54.0, -23.0)
             )
 
             Pattern.B -> path( // B
                 spikeMarkAlignPose = Pose2d(-35.0, -9.0, Math.toRadians(270.0)),
-                pixelSpikeLeavePose = Pose2d(-35.0, -8.0, Math.toRadians(200.0)),
+                pixelSpikeLeavePose = Pose2d(-35.0, -6.0, Math.toRadians(270.0)),
                 backdropScorePose = Pose2d(56.5, -31.0, Math.toRadians(180.0)),
-                parkVector = Vector2d(54.0, -26.0)
+                parkVector = Vector2d(54.0, -23.0)
             )
 
             Pattern.C -> path( // C
-                spikeMarkAlignPose = Pose2d(-33.5, -32.0, Math.toRadians(0.0)),
+                spikeMarkAlignPose = Pose2d(-34.5, -29.0, Math.toRadians(0.0)),
                 armDownTimeOffset = 0.0,
                 waitBeforeFirstDrive = 0.8,
 
                 pixelSpikeLeavePose = Pose2d(-53.0, -8.0, Math.toRadians(0.0)),
                 backdropScorePose = Pose2d(55.5, -40.0, Math.toRadians(180.0)),
-                parkVector = Vector2d(53.0, -25.0)
+                parkVector = Vector2d(53.0, -23.0)
             )
         }
     }.build()
@@ -84,6 +84,7 @@ class AutoRedLeft2 : PhobosAuto(Alliance.RED) {
             + IntakeStopCmd()
             + IntakeArmGoToPositionCmd(0)
         }
+
         waitSeconds(0.8)
         lineToLinearHeading(pixelSpikeLeavePose)
         waitSeconds(2.0)
@@ -104,10 +105,12 @@ class AutoRedLeft2 : PhobosAuto(Alliance.RED) {
 
                 - BoxLeftDoorOpenCmd().async()
 
-                - waitForSeconds(2.0)
+                - waitForSeconds(1.5)
 
                 - BoxLeftDoorCloseCmd().async()
                 - BoxArmDownCmd().async()
+
+                - waitForSeconds(1.0)
 
                 - LiftDriveCmd { -0.5 }.async()
                 - waitForSeconds(5.0)

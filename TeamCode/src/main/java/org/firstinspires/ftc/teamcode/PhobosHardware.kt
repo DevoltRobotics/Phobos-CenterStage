@@ -39,6 +39,8 @@ class PhobosHardware : SimpleHardware() {
         depositRight.gobilda()
 
         planeLauncher.gobilda()
+
+        planeLauncher.position = 0.0
     }
 
 }
