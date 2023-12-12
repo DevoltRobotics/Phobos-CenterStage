@@ -9,7 +9,13 @@ class LiftDriveCmd(val power: () -> Double) : DeltaCommand() {
     val sub = require<LiftSubsystem>()
 
     override fun run() {
-        sub.power = power()
+        val value = power()
+
+        if(value <= -0.1) {
+            sub.power = -0.28
+        } else {
+            sub.power = value
+        }
     }
 
 }

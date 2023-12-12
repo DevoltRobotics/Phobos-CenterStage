@@ -30,7 +30,7 @@ abstract class PhobosOpMode : DeltaOpMode() {
         intakeArmSub = IntakeArmSubsystem(hardware.intakeArm, hardware.intakeWrist)
         intakeDoorSub = IntakeDoorSubsystem(hardware.intakeDoor)
 
-        liftSub = LiftSubsystem(hardware.lift)
+        liftSub = LiftSubsystem(hardware.liftLeft, hardware.liftRight)
 
         boxSub = BoxSubsystem(hardware.depositLeft, hardware.depositRight)
         boxArmSub = BoxArmSubsystem(hardware.depositBarsLeft, hardware.depositBarsRight)

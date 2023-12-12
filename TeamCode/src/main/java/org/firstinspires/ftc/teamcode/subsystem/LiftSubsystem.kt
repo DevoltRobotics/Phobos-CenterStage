@@ -8,7 +8,7 @@ import com.qualcomm.robotcore.hardware.DcMotor
 import com.qualcomm.robotcore.hardware.DcMotorSimple
 
 @Config
-class LiftSubsystem(val liftMotor: DcMotor) : DeltaSubsystem() {
+class LiftSubsystem(val leftMotor: DcMotor, val rightMotor: DcMotor) : DeltaSubsystem() {
 
     var controller = createController()
         private set
@@ -16,20 +16,21 @@ class LiftSubsystem(val liftMotor: DcMotor) : DeltaSubsystem() {
     var power = 0.0
 
     init {
-        liftMotor.direction = DcMotorSimple.Direction.REVERSE;
+        rightMotor.direction = DcMotorSimple.Direction.REVERSE;
     }
 
     override fun loop() {
-        liftMotor.power = power + 0.2
+        leftMotor.power = power + 0.16
+        rightMotor.power = power + 0.16
     }
 
     fun reset() {
-        liftMotor.mode = DcMotor.RunMode.STOP_AND_RESET_ENCODER
-        liftMotor.mode = DcMotor.RunMode.RUN_WITHOUT_ENCODER
+        rightMotor.mode = DcMotor.RunMode.STOP_AND_RESET_ENCODER
+        rightMotor.mode = DcMotor.RunMode.RUN_WITHOUT_ENCODER
     }
 
     fun updateController() {
-        liftMotor.power = controller.update(liftMotor.currentPosition.toDouble())
+        power = controller.update(rightMotor.currentPosition.toDouble())
     }
 
     private fun createController() = PIDFController(pidfCoefficients)

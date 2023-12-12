@@ -17,7 +17,8 @@ class PhobosHardware : SimpleHardware() {
     val intakeDoor by hardware<Servo>("id")
     val intakeWrist by hardware<Servo>("iw")
 
-    val lift by hardware<DcMotor>("sl")
+    val liftLeft by hardware<DcMotor>("sl")
+    val liftRight by hardware<DcMotor>("sr")
 
     val depositBarsLeft by hardware<Servo>("al")
     val depositBarsRight by hardware<Servo>("ar")

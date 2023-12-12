@@ -19,12 +19,12 @@ open class LiftGoToPositionCmd(val position: Int) : DeltaCommand() {
         if(sub.controller.targetPosition < 900) {
             sub.updateController()
         } else {
-            sub.liftMotor.power = 0.0
+            sub.power = 0.0
         }
     }
 
     override fun end(interrupted: Boolean) {
-        sub.liftMotor.power = 0.0
+        sub.power = 0.0
     }
 
 }
