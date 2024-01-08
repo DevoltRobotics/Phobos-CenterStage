@@ -16,11 +16,8 @@ open class LiftGoToPositionCmd(val position: Int) : DeltaCommand() {
 
     override fun run() {
         sub.controller.targetPosition = position.toDouble()
-        if(sub.controller.targetPosition < 900) {
-            sub.updateController()
-        } else {
-            sub.power = 0.0
-        }
+
+        sub.updateController()
     }
 
     override fun end(interrupted: Boolean) {

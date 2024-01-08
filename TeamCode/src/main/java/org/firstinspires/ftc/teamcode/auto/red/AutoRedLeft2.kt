@@ -14,6 +14,7 @@ import org.firstinspires.ftc.teamcode.command.box.BoxLeftDoorOpenCmd
 import org.firstinspires.ftc.teamcode.command.intake.arm.IntakeArmGoToPositionCmd
 import org.firstinspires.ftc.teamcode.command.intake.arm.IntakeArmWristPositionCmd
 import org.firstinspires.ftc.teamcode.command.lift.LiftDriveCmd
+import org.firstinspires.ftc.teamcode.command.lift.LiftGoToPositionCmd
 import org.firstinspires.ftc.teamcode.command.mecanum.IntakeReleaseCmd
 import org.firstinspires.ftc.teamcode.command.mecanum.IntakeStopCmd
 import org.firstinspires.ftc.teamcode.rr.trajectorysequence.TrajectorySequenceBuilder
@@ -29,7 +30,7 @@ class AutoRedLeft2 : PhobosAuto(Alliance.RED) {
             Pattern.A -> path( // A
                 spikeMarkAlignPose = Pose2d(-36.5, -16.0, Math.toRadians(235.0)),
                 pixelSpikeLeavePose = Pose2d(-36.5, -8.0, Math.toRadians(215.0)),
-                backdropScorePose = Pose2d(56.5, -24.0, Math.toRadians(180.0)),
+                backdropScorePose = Pose2d(56.3, -24.0, Math.toRadians(180.0)),
                 parkVector = Vector2d(54.0, -23.0)
             )
 
@@ -41,7 +42,7 @@ class AutoRedLeft2 : PhobosAuto(Alliance.RED) {
             )
 
             Pattern.C -> path( // C
-                spikeMarkAlignPose = Pose2d(-34.5, -29.0, Math.toRadians(0.0)),
+                spikeMarkAlignPose = Pose2d(-34.5, -33.0, Math.toRadians(0.0)),
                 armDownTimeOffset = 0.0,
                 waitBeforeFirstDrive = 0.8,
 
@@ -76,7 +77,7 @@ class AutoRedLeft2 : PhobosAuto(Alliance.RED) {
         lineToSplineHeading(spikeMarkAlignPose)
 
         UNSTABLE_addTemporalMarkerOffset(0.0) {
-            + IntakeArmWristPositionCmd(0.59).endRightAway()
+            + IntakeArmWristPositionCmd(0.6).endRightAway()
             + IntakeReleaseCmd()
         }
 
@@ -93,13 +94,12 @@ class AutoRedLeft2 : PhobosAuto(Alliance.RED) {
 
         UNSTABLE_addTemporalMarkerOffset(2.0) {
             + deltaSequence {
-                - LiftDriveCmd { 1.0 }.async()
+                - LiftGoToPositionCmd(200).async()
                 - waitForSeconds(0.15)
-                - LiftDriveCmd { 0.0 }.async()
 
                 - waitForSeconds(1.0)
 
-                - BoxArmPositionCmd(0.42).async()
+                - BoxArmPositionCmd(0.44).async()
 
                 - waitForSeconds(1.0)
 

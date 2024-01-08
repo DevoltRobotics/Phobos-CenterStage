@@ -19,11 +19,11 @@ public class BlueTeamElementDetectionPipeline extends TeamElementDetectionPipeli
     static final Scalar BLUE = new Scalar(0, 0, 255);
     static final Scalar GREEN = new Scalar(0, 255, 0);
 
-    public static int region1X = 50;
-    public static int region1Y = 40;
+    public static int region1X = 130;
+    public static int region1Y = 110;
 
-    public static int region2X = 190;
-    public static int region2Y = 40;
+    public static int region2X = 260;
+    public static int region2Y = 110;
 
     /*
      * The core values which define the location and size of the sample regions

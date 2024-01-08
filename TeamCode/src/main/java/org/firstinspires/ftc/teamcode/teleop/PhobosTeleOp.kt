@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.teleop
 import com.acmerobotics.roadrunner.geometry.Pose2d
 import com.github.serivesmejia.deltacommander.command.DeltaInstantCmd
 import com.github.serivesmejia.deltacommander.command.DeltaRunCmd
+import com.github.serivesmejia.deltacommander.dsl.deltaSequence
 import com.github.serivesmejia.deltacommander.endRightAway
 import com.github.serivesmejia.deltaevent.gamepad.button.Button
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp
@@ -17,6 +18,7 @@ import org.firstinspires.ftc.teamcode.command.intake.arm.IntakeArmDriveCmd
 import org.firstinspires.ftc.teamcode.command.intake.arm.IntakeArmGoToPositionCmd
 import org.firstinspires.ftc.teamcode.command.intake.arm.IntakeArmWristPositionCmd
 import org.firstinspires.ftc.teamcode.command.lift.LiftDriveCmd
+import org.firstinspires.ftc.teamcode.command.lift.LiftGoToPositionCmd
 import org.firstinspires.ftc.teamcode.command.mecanum.FieldCentricMecanumCmd
 import org.firstinspires.ftc.teamcode.command.mecanum.IntakeAbsorbCmd
 import org.firstinspires.ftc.teamcode.command.mecanum.IntakeReleaseCmd
@@ -66,7 +68,7 @@ class PhobosTeleOp : PhobosOpMode() {
                 IntakeStopCmd()
         )
 
-        superGamepad2.scheduleOn(Button.X,
+        superGamepad2.scheduleOn(Button.LEFT_BUMPER,
             DeltaInstantCmd { hardware.planeLauncher.position = 1.0 },
             DeltaInstantCmd { hardware.planeLauncher.position = 0.0 }
         )
@@ -117,6 +119,10 @@ class PhobosTeleOp : PhobosOpMode() {
                 BoxArmDownCmd()
         )
 
+        superGamepad2.scheduleOnPress(Button.DPAD_UP,
+            LiftGoToPositionCmd(1200)
+        )
+
         // DEPOSIT BOX
 
         boxArmSub.defaultCommand = BoxArmDriveCmd { (gamepad2.right_trigger - gamepad2.left_trigger).toDouble() }
@@ -129,9 +135,27 @@ class PhobosTeleOp : PhobosOpMode() {
 
         boxSub.defaultCommand = BoxDoorsDriveCmd({gamepad1.x}, {gamepad1.y})
 
+        // HANG
+
+        superGamepad2.scheduleOn(Button.X,
+            DeltaInstantCmd { hardware.hang.power = 1.0 },
+            DeltaInstantCmd { hardware.hang.power = 0.0 }
+        )
+
+        superGamepad2.scheduleOn(Button.Y,
+            deltaSequence {
+                - cuelgaSequence().async()
+                - DeltaInstantCmd { hardware.hang.power = -1.0 }
+            },
+            DeltaInstantCmd { hardware.hang.power = 0.0 }
+        )
+
         // telemetry
         + DeltaRunCmd {
             telemetry.addData("pose", hardware.drive.poseEstimate)
+
+            telemetry.addData("lift target", liftSub.controller.targetPosition)
+            telemetry.addData("lift", liftSub.leftMotor.currentPosition)
 
             telemetry.addData("arm", hardware.intakeArm.power)
             telemetry.addData("arm target", intakeArmSub.controller.targetPosition)
@@ -151,6 +175,11 @@ class PhobosTeleOp : PhobosOpMode() {
 
             telemetry.update()
         }
+    }
+
+    fun cuelgaSequence() = deltaSequence {
+        - IntakeArmWristPositionCmd(0.7).async()
+        - BoxArmPositionCmd(0.1)
     }
 
 }

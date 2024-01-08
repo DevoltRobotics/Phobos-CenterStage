@@ -7,7 +7,6 @@ import com.github.serivesmejia.deltacommander.DeltaSubsystem
 import com.qualcomm.robotcore.hardware.DcMotor
 import com.qualcomm.robotcore.hardware.DcMotorSimple
 
-@Config
 class LiftSubsystem(val leftMotor: DcMotor, val rightMotor: DcMotor) : DeltaSubsystem() {
 
     var controller = createController()
@@ -30,14 +29,14 @@ class LiftSubsystem(val leftMotor: DcMotor, val rightMotor: DcMotor) : DeltaSubs
     }
 
     fun updateController() {
-        power = controller.update(rightMotor.currentPosition.toDouble())
+        power = controller.update(leftMotor.currentPosition.toDouble())
     }
 
-    private fun createController() = PIDFController(pidfCoefficients)
+    private fun createController() = PIDFController(Lift.pidfCoefficients)
+}
 
-    companion object {
-        @JvmStatic var pidfCoefficients = PIDCoefficients(0.03, 0.0001, 0.0001)
-
-        @JvmStatic var middlePos = 1000
-    }
+@Config
+object Lift {
+    @JvmField var pidfCoefficients = PIDCoefficients(0.01, 0.0, 0.0)
+    @JvmField var middlePos = 1000
 }

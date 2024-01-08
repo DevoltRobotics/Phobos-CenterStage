@@ -44,7 +44,7 @@ abstract class PhobosAuto(val alliance: Alliance) : PhobosOpMode() {
 
         camera.openCameraDeviceAsync(object: AsyncCameraOpenListener {
             override fun onOpened() {
-                camera.startStreaming(320, 240, OpenCvCameraRotation.UPRIGHT)
+                camera.startStreaming(320, 240, OpenCvCameraRotation.UPSIDE_DOWN)
 
                 FtcDashboard.getInstance().startCameraStream(camera, 0.0)
             }

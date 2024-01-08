@@ -20,6 +20,8 @@ class PhobosHardware : SimpleHardware() {
     val liftLeft by hardware<DcMotor>("sl")
     val liftRight by hardware<DcMotor>("sr")
 
+    val hang by hardware<DcMotor>("hg")
+
     val depositBarsLeft by hardware<Servo>("al")
     val depositBarsRight by hardware<Servo>("ar")
 
@@ -42,6 +44,8 @@ class PhobosHardware : SimpleHardware() {
         planeLauncher.gobilda()
 
         planeLauncher.position = 0.0
+
+        hang.zeroPowerBehavior = DcMotor.ZeroPowerBehavior.BRAKE
     }
 
 }
