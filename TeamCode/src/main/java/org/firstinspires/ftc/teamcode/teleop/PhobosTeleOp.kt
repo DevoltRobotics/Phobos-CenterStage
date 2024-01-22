@@ -40,8 +40,8 @@ class PhobosTeleOp : PhobosOpMode() {
 
         // MECANUM
 
-        superGamepad1.scheduleOnPress(Button.DPAD_UP, DeltaInstantCmd {
-            hardware.drive.poseEstimate = Pose2d()
+        superGamepad1.scheduleOnPress(Button.LEFT_STICK_BUTTON, DeltaInstantCmd {
+            hardware.drive.poseEstimate = Pose2d(0.0, 0.0, 0.0)
         })
 
         + FieldCentricMecanumCmd(gamepad1)
@@ -98,7 +98,7 @@ class PhobosTeleOp : PhobosOpMode() {
 
         superGamepad2.toggleScheduleOn(Button.B,
                 IntakeArmWristPositionCmd(0.42).endRightAway(),
-                IntakeArmWristPositionCmd(0.53).endRightAway()
+                IntakeArmWristPositionCmd(0.54).endRightAway()
         )
 
         // LIFT

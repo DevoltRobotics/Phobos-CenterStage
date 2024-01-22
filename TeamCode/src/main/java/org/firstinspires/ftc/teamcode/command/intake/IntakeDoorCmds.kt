@@ -7,13 +7,12 @@ class IntakeDoorOpenCmd : DeltaCommand() {
     val sub = require<IntakeDoorSubsystem>()
 
     override fun run() {
-        sub.doorServo.position = 0.2
+        sub.doorServo.position = 0.6
     }
 }
 
 class IntakeDoorCloseCmd : DeltaCommand() {
     val sub = require<IntakeDoorSubsystem>()
-
     override fun run() {
         sub.doorServo.position = 1.0
     }
