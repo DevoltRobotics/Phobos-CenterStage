@@ -14,16 +14,27 @@ fun main() {
             .setColorScheme(ColorSchemeBlueDark())
             .setConstraints(60.0, 60.0, Math.toRadians(180.0), Math.toRadians(180.0), 17.5)
             .followTrajectorySequence { drive: DriveShim ->
-                drive.trajectorySequenceBuilder(Pose2d(11.0, -59.0, Math.toRadians(90.0)))
-                    //.setReversed(true)
-                    .splineToSplineHeading(Pose2d(47.2, -34.8, Math.toRadians(180.0)), Math.toRadians(0.0))
+                drive.trajectorySequenceBuilder(Pose2d(10.0, -59.0, Math.toRadians(90.0))).apply {
+                    splineToSplineHeading(Pose2d(47.2, -34.8, Math.toRadians(180.0)), Math.toRadians(0.0))
+
+                    waitSeconds(3.0)
 
                     // cycle
-                    .lineToConstantHeading(Vector2d(-55.5, -36.2))
+                    splineToConstantHeading(Vector2d(30.5, -36.2), Math.toRadians(180.0))
 
-                    .lineToConstantHeading(Vector2d(46.0, -34.8)) // grab
-                    .lineToConstantHeading(Vector2d(47.2, -34.8))
-                    .build()
+                    waitSeconds(2.0)
+
+                    splineToConstantHeading(Vector2d(11.0, -58.0), Math.toRadians(180.0))
+
+                    splineToSplineHeading(Pose2d(-34.0, -58.8, Math.toRadians(180.0)), Math.toRadians(180.0)) // grab
+                    splineToConstantHeading(Vector2d(-56.0, -11.5), Math.toRadians(180.0))
+
+                    waitSeconds(2.0)
+
+                    lineToConstantHeading(Vector2d(-7.3, -11.5))
+
+                    splineToConstantHeading(Vector2d(47.2, -34.8), Math.toRadians(270.0))
+                }.build()
             }
 
     meepMeep.setBackground(MeepMeep.Background.FIELD_CENTERSTAGE_JUICE_DARK)
