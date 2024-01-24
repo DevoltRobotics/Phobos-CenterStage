@@ -17,10 +17,10 @@ class BoxSubsystem(val leftDoorServo: Servo, val rightDoorServo: Servo) : DeltaS
     }
 
     companion object {
-        const val leftOpenPos = 0.2
+        const val leftOpenPos = 0.24
         const val leftClosePos = 0.0
 
-        const val rightOpenPos = 0.5
+        const val rightOpenPos = 0.44
         const val rightClosePos = 0.7
     }
 

@@ -15,13 +15,20 @@ class AutoRedRightCompleto : PhobosAuto(Alliance.RED) {
     override val startPose = Pose2d(10.0, -59.0, Math.toRadians(90.0))
 
     override fun sequence(pattern: Pattern) = drive.trajectorySequenceBuilder(startPose).apply {
-        splineToSplineHeading(Pose2d(49.1, -34.8, Math.toRadians(180.0)), Math.toRadians(0.0))
+        splineToSplineHeading(Pose2d(50.2, -34.8, Math.toRadians(180.0)), Math.toRadians(0.0))
 
-        // cycle
-        lineToConstantHeading(Vector2d(-55.5, -35.2))
+        repeat(2) {
+            waitSeconds(2.0)
 
-        lineToConstantHeading(Vector2d(46.0, -34.8)) // grab
-        lineToConstantHeading(Vector2d(49.2, -34.8))
+            // cycle
+            lineToConstantHeading(Vector2d(-32.5, -32.0))
+            splineToConstantHeading(Vector2d(-56.0, -11.5), Math.toRadians(180.0))
+
+            waitSeconds(2.0)
+
+            lineToConstantHeading(Vector2d(-7.3, -7.8))
+            splineToConstantHeading(Vector2d(50.2, -34.8), Math.toRadians(270.0))
+        }
     }.build()
 
     fun TrajectorySequenceBuilder.path() {

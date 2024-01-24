@@ -15,24 +15,15 @@ fun main() {
             .setConstraints(60.0, 60.0, Math.toRadians(180.0), Math.toRadians(180.0), 17.5)
             .followTrajectorySequence { drive: DriveShim ->
                 drive.trajectorySequenceBuilder(Pose2d(10.0, -59.0, Math.toRadians(90.0))).apply {
-                    splineToSplineHeading(Pose2d(47.2, -34.8, Math.toRadians(180.0)), Math.toRadians(0.0))
-
-                    waitSeconds(3.0)
+                    splineToSplineHeading(Pose2d(49.1, -34.8, Math.toRadians(180.0)), Math.toRadians(0.0))
 
                     // cycle
-                    splineToConstantHeading(Vector2d(30.5, -36.2), Math.toRadians(180.0))
-
-                    waitSeconds(2.0)
-
-                    splineToConstantHeading(Vector2d(11.0, -58.0), Math.toRadians(180.0))
-
-                    splineToSplineHeading(Pose2d(-34.0, -58.8, Math.toRadians(180.0)), Math.toRadians(180.0)) // grab
+                    lineToConstantHeading(Vector2d(-32.0, -35.2))
                     splineToConstantHeading(Vector2d(-56.0, -11.5), Math.toRadians(180.0))
 
                     waitSeconds(2.0)
 
                     lineToConstantHeading(Vector2d(-7.3, -11.5))
-
                     splineToConstantHeading(Vector2d(47.2, -34.8), Math.toRadians(270.0))
                 }.build()
             }
