@@ -6,6 +6,7 @@ import com.noahbres.meepmeep.MeepMeep
 import com.noahbres.meepmeep.core.colorscheme.scheme.ColorSchemeBlueDark
 import com.noahbres.meepmeep.roadrunner.DefaultBotBuilder
 import com.noahbres.meepmeep.roadrunner.DriveShim
+import com.noahbres.meepmeep.roadrunner.trajectorysequence.TrajectorySequenceBuilder
 
 fun main() {
     val meepMeep = MeepMeep(600)
@@ -15,16 +16,14 @@ fun main() {
             .setConstraints(60.0, 60.0, Math.toRadians(180.0), Math.toRadians(180.0), 17.5)
             .followTrajectorySequence { drive: DriveShim ->
                 drive.trajectorySequenceBuilder(Pose2d(10.0, -59.0, Math.toRadians(90.0))).apply {
-                    splineToSplineHeading(Pose2d(49.1, -34.8, Math.toRadians(180.0)), Math.toRadians(0.0))
-
-                    // cycle
-                    lineToConstantHeading(Vector2d(-32.0, -35.2))
-                    splineToConstantHeading(Vector2d(-56.0, -11.5), Math.toRadians(180.0))
-
-                    waitSeconds(2.0)
-
-                    lineToConstantHeading(Vector2d(-7.3, -11.5))
-                    splineToConstantHeading(Vector2d(47.2, -34.8), Math.toRadians(270.0))
+                    path( // B
+                            backdropPixelScoreY = -34.8,
+                            spikeMarkPixelScorePose = Pose2d(32.0, -24.0, Math.toRadians(180.0)),
+                            firstTrussCrossPath = {
+                                splineToConstantHeading(Vector2d(10.0, -35.0), Math.toRadians(180.0))
+                                splineToConstantHeading(Vector2d(-33.0, -35.0), Math.toRadians(180.0))
+                            }
+                    )
                 }.build()
             }
 
@@ -34,4 +33,81 @@ fun main() {
             // Add both of our declared bot entities
             .addEntity(robot)
             .start()
+}
+
+
+
+private fun TrajectorySequenceBuilder.path(
+        cycles: Int = 2,
+        backdropPixelScoreY: Double = -34.8,
+        spikeMarkPixelScorePose: Pose2d,
+        firstTrussCrossPath: TrajectorySequenceBuilder.() -> Unit
+) {
+    UNSTABLE_addTemporalMarkerOffset(0.0) {
+    }
+
+    UNSTABLE_addTemporalMarkerOffset(1.0) {
+    }
+
+    splineToSplineHeading(Pose2d(50.2, backdropPixelScoreY, Math.toRadians(180.0)), Math.toRadians(0.0))
+
+    UNSTABLE_addTemporalMarkerOffset(0.0) {
+    }
+
+    UNSTABLE_addTemporalMarkerOffset(2.0) {
+    }
+
+    repeat(cycles) {
+        waitSeconds(2.0)
+
+        // cycle
+        if(it == 0) {
+            UNSTABLE_addTemporalMarkerOffset(0.0) {
+            }
+
+            lineToSplineHeading(spikeMarkPixelScorePose)
+
+            UNSTABLE_addTemporalMarkerOffset(0.0) {
+            }
+
+            waitSeconds(1.5)
+
+            UNSTABLE_addTemporalMarkerOffset(0.0) {
+            }
+
+            firstTrussCrossPath()
+        } else {
+            splineToConstantHeading(Vector2d(-32.5, -34.0), Math.toRadians(176.0))
+        }
+
+        UNSTABLE_addTemporalMarkerOffset(0.0) {
+        }
+        UNSTABLE_addTemporalMarkerOffset(0.2) {
+        }
+        splineToConstantHeading(Vector2d(-56.0, -11.5), Math.toRadians(180.0))
+
+        waitSeconds(2.0)
+
+        UNSTABLE_addTemporalMarkerOffset(0.0) {
+        }
+
+        UNSTABLE_addTemporalMarkerOffset(3.0) {
+        }
+        UNSTABLE_addTemporalMarkerOffset(3.5) {
+        }
+        lineToConstantHeading(Vector2d(-7.3, -7.8))
+
+        UNSTABLE_addTemporalMarkerOffset(3.0) {
+        }
+
+        UNSTABLE_addTemporalMarkerOffset(4.0) {
+        }
+        splineToConstantHeading(Vector2d(50.2, -34.8), Math.toRadians(270.0))
+
+        UNSTABLE_addTemporalMarkerOffset(0.0) {
+        }
+        UNSTABLE_addTemporalMarkerOffset(1.8) {
+        }
+        waitSeconds(2.0)
+    }
 }

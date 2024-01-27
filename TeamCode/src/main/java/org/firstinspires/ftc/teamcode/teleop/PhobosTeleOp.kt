@@ -6,6 +6,7 @@ import com.github.serivesmejia.deltacommander.command.DeltaRunCmd
 import com.github.serivesmejia.deltacommander.dsl.deltaSequence
 import com.github.serivesmejia.deltacommander.endRightAway
 import com.github.serivesmejia.deltaevent.gamepad.button.Button
+import com.qualcomm.hardware.rev.RevBlinkinLedDriver
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp
 import org.firstinspires.ftc.teamcode.PhobosOpMode
 import org.firstinspires.ftc.teamcode.command.box.BoxArmDownCmd
@@ -31,6 +32,8 @@ import kotlin.math.abs
 class PhobosTeleOp : PhobosOpMode() {
 
     override fun setup() {
+        hardware.blinkin.setPattern(RevBlinkinLedDriver.BlinkinPattern.CONFETTI);
+
         intakeArmSub.reset()
         liftSub.reset()
 

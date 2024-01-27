@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode
 
 import com.github.serivesmejia.deltasimple.SimpleHardware
+import com.qualcomm.hardware.rev.RevBlinkinLedDriver
 import com.qualcomm.hardware.rev.RevColorSensorV3
 import com.qualcomm.hardware.rev.RevTouchSensor
 
@@ -30,6 +31,8 @@ class PhobosHardware : SimpleHardware() {
 
     val planeLauncher by hardware<Servo>("pl")
 
+    val blinkin by hardware<RevBlinkinLedDriver>("blinkin")
+
     override fun init() {
         intake.gobilda()
         intakeDoor.gobilda()
@@ -42,7 +45,6 @@ class PhobosHardware : SimpleHardware() {
         depositRight.gobilda()
 
         planeLauncher.gobilda()
-
         planeLauncher.position = 0.0
 
         hang.zeroPowerBehavior = DcMotor.ZeroPowerBehavior.BRAKE
