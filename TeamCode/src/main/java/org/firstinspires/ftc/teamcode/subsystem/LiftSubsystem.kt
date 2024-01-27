@@ -37,6 +37,6 @@ class LiftSubsystem(val leftMotor: DcMotor, val rightMotor: DcMotor) : DeltaSubs
 
 @Config
 object Lift {
-    @JvmField var pidfCoefficients = PIDCoefficients(0.01, 0.0, 0.0)
+    @JvmField var pidfCoefficients = PIDCoefficients(0.008, 0.0, 0.0)
     @JvmField var middlePos = 1000
 }

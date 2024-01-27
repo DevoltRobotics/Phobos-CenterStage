@@ -18,9 +18,11 @@ fun main() {
                 drive.trajectorySequenceBuilder(Pose2d(10.0, -59.0, Math.toRadians(90.0))).apply {
                     path( // B
                             backdropPixelScoreY = -34.8,
-                            spikeMarkPixelScorePose = Pose2d(32.0, -24.0, Math.toRadians(180.0)),
+                            spikeMarkPixelScorePose = Pose2d(23.0, -44.0, Math.toRadians(90.0)),
                             firstTrussCrossPath = {
+                                setReversed(true)
                                 splineToConstantHeading(Vector2d(10.0, -35.0), Math.toRadians(180.0))
+
                                 splineToConstantHeading(Vector2d(-33.0, -35.0), Math.toRadians(180.0))
                             }
                     )
@@ -76,16 +78,16 @@ private fun TrajectorySequenceBuilder.path(
             }
 
             firstTrussCrossPath()
+            splineToSplineHeading(Pose2d(-56.0, -11.5, Math.toRadians(180.0)), Math.toRadians(180.0))
         } else {
-            splineToConstantHeading(Vector2d(-32.5, -34.0), Math.toRadians(176.0))
+            lineToConstantHeading(Vector2d(-32.5, -34.0))
+            splineToConstantHeading(Vector2d(-56.0, -11.5), Math.toRadians(180.0))
         }
 
         UNSTABLE_addTemporalMarkerOffset(0.0) {
         }
         UNSTABLE_addTemporalMarkerOffset(0.2) {
         }
-        splineToConstantHeading(Vector2d(-56.0, -11.5), Math.toRadians(180.0))
-
         waitSeconds(2.0)
 
         UNSTABLE_addTemporalMarkerOffset(0.0) {

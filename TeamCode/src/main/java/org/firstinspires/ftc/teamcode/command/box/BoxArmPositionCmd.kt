@@ -12,3 +12,4 @@ open class BoxArmPositionCmd(val position: Double) : DeltaCommand() {
 }
 
 class BoxArmDownCmd : BoxArmPositionCmd(0.0)
+class BoxArmMiddleCmd : BoxArmPositionCmd(0.42)

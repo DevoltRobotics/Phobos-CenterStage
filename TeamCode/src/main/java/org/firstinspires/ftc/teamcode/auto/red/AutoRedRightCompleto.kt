@@ -7,8 +7,10 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous
 import org.firstinspires.ftc.teamcode.Alliance
 import org.firstinspires.ftc.teamcode.auto.PhobosAuto
 import org.firstinspires.ftc.teamcode.command.box.BoxArmDownCmd
+import org.firstinspires.ftc.teamcode.command.box.BoxArmMiddleCmd
 import org.firstinspires.ftc.teamcode.command.box.BoxArmPositionCmd
 import org.firstinspires.ftc.teamcode.command.box.BoxDoorsCloseCmd
+import org.firstinspires.ftc.teamcode.command.box.BoxDoorsOpenCmd
 import org.firstinspires.ftc.teamcode.command.box.BoxLeftDoorCloseCmd
 import org.firstinspires.ftc.teamcode.command.box.BoxLeftDoorOpenCmd
 import org.firstinspires.ftc.teamcode.command.intake.IntakeDoorCloseCmd
@@ -30,58 +32,79 @@ class AutoRedRightCompleto : PhobosAuto(Alliance.RED) {
 
     override fun sequence(pattern: Pattern) = drive.trajectorySequenceBuilder(startPose).apply {
         when(pattern) {
-            A -> path( // A
+            A -> path( // B
                 backdropPixelScoreY = -34.8,
-                spikeMarkPixelScorePose = Pose2d(32.0, -24.0, Math.toRadians(180.0)),
-                trussCrossRealignPose = Pose2d(32.0, -34.0, Math.toRadians(180.0))
+                spikeMarkPixelScorePose = Pose2d(23.0, -44.0, Math.toRadians(90.0)),
+                firstTrussCrossPath = {
+                    setReversed(true)
+                    splineToConstantHeading(Vector2d(10.0, -33.0), Math.toRadians(180.0))
+
+                    splineToConstantHeading(Vector2d(-33.0, -33.0), Math.toRadians(180.0))
+                }
             )
-            C -> path( // C
+            C -> path( // B
                 backdropPixelScoreY = -34.8,
-                spikeMarkPixelScorePose = Pose2d(32.0, -24.0, Math.toRadians(180.0)),
-                trussCrossRealignPose = Pose2d(32.0, -34.0, Math.toRadians(180.0))
+                spikeMarkPixelScorePose = Pose2d(23.0, -44.0, Math.toRadians(90.0)),
+                firstTrussCrossPath = {
+                    setReversed(true)
+                    splineToConstantHeading(Vector2d(10.0, -33.0), Math.toRadians(180.0))
+                    splineToConstantHeading(Vector2d(-33.0, -33.0), Math.toRadians(180.0))
+                }
             )
             else -> path( // B
                 backdropPixelScoreY = -34.8,
-                spikeMarkPixelScorePose = Pose2d(32.0, -24.0, Math.toRadians(180.0)),
-                trussCrossRealignPose = Pose2d(32.0, -34.0, Math.toRadians(180.0))
+                spikeMarkPixelScorePose = Pose2d(23.0, -44.0, Math.toRadians(90.0)),
+                firstTrussCrossPath = {
+                    setReversed(true)
+                    splineToConstantHeading(Vector2d(10.0, -33.0), Math.toRadians(180.0))
+
+                    splineToConstantHeading(Vector2d(-33.0, -33.0), Math.toRadians(180.0))
+                }
             )
         }
     }.build()
 
     private fun TrajectorySequenceBuilder.path(
-            cycles: Int = 2,
-            backdropPixelScoreY: Double = -34.8,
-            spikeMarkPixelScorePose: Pose2d,
-            trussCrossRealignPose: Pose2d,
+        cycles: Int = 1,
+        backdropPixelScoreY: Double = -34.8,
+        spikeMarkPixelScorePose: Pose2d,
+        firstTrussCrossPath: TrajectorySequenceBuilder.() -> Unit
     ) {
         UNSTABLE_addTemporalMarkerOffset(0.0) {
-            + LiftGoToPositionCmd(200)
             + IntakeArmWristPositionCmd(0.42).endRightAway()
-            + BoxDoorsCloseCmd().endRightAway()
+            + BoxLeftDoorCloseCmd()
         }
 
-        UNSTABLE_addTemporalMarkerOffset(1.0) {
-            + BoxArmPositionCmd(0.6)
+        UNSTABLE_addTemporalMarkerOffset(1.5) {
+            + LiftGoToPositionCmd(200)
         }
 
-        splineToSplineHeading(Pose2d(50.2, backdropPixelScoreY, Math.toRadians(180.0)), Math.toRadians(0.0))
+        UNSTABLE_addTemporalMarkerOffset(2.5) {
+            + BoxArmMiddleCmd()
+        }
 
-        UNSTABLE_addTemporalMarkerOffset(0.0) {
-            + BoxLeftDoorOpenCmd()
+        splineToSplineHeading(
+            Pose2d(51.2, backdropPixelScoreY, Math.toRadians(180.0)),
+            Math.toRadians(0.0)
+        )
+
+        UNSTABLE_addTemporalMarkerOffset(0.5) {
+            + BoxDoorsOpenCmd()
+        }
+        UNSTABLE_addTemporalMarkerOffset(1.2) {
+            + BoxDoorsCloseCmd()
         }
 
         UNSTABLE_addTemporalMarkerOffset(2.0) {
-            + BoxArmDownCmd()
-            + BoxLeftDoorCloseCmd()
             + LiftGoToPositionCmd(0)
+            + BoxArmDownCmd()
         }
+        waitSeconds(1.5)
 
         repeat(cycles) {
-            waitSeconds(2.0)
-
             // cycle
-            if(it == 1) {
-                UNSTABLE_addTemporalMarkerOffset(0.0) {
+            if (it == 0) {
+                UNSTABLE_addTemporalMarkerOffset(1.0) {
                     + IntakeArmGoToPositionCmd(-230)
                 }
 
@@ -92,60 +115,27 @@ class AutoRedRightCompleto : PhobosAuto(Alliance.RED) {
                     + IntakeReleaseCmd()
                 }
 
-                waitSeconds(1.5)
-
-                UNSTABLE_addTemporalMarkerOffset(0.0) {
-                    + IntakeArmGoToPositionCmd(0)
-                    + IntakeArmWristPositionCmd(0.42).endRightAway()
+                UNSTABLE_addTemporalMarkerOffset(1.0) {
                     + IntakeStopCmd()
+                    + IntakeArmGoToPositionCmd(0)
                 }
 
-                lineToSplineHeading(trussCrossRealignPose)
-            }
+                waitSeconds(1.5)
 
-            splineToConstantHeading(Vector2d(-32.5, -32.0), Math.toRadians(180.0))
-
-            UNSTABLE_addTemporalMarkerOffset(0.0) {
-                + IntakeAbsorbCmd()
-                + IntakeArmWristPositionCmd(0.54).endRightAway()
+                firstTrussCrossPath()
+                splineToSplineHeading(
+                    Pose2d(-56.0, -11.5, Math.toRadians(180.0)),
+                    Math.toRadians(180.0)
+                )
+            } else {
+                lineToConstantHeading(Vector2d(-32.5, -26.0))
+                splineToConstantHeading(Vector2d(-56.0, -11.5), Math.toRadians(180.0))
             }
-            UNSTABLE_addTemporalMarkerOffset(0.2) {
-                + IntakeArmGoToPositionCmd(-240)
-            }
-            splineToConstantHeading(Vector2d(-56.0, -11.5), Math.toRadians(180.0))
 
             waitSeconds(2.0)
 
-            UNSTABLE_addTemporalMarkerOffset(0.0) {
-                + IntakeArmWristPositionCmd(0.42).endRightAway()
-                + IntakeArmGoToPositionCmd(0)
-            }
-
-            UNSTABLE_addTemporalMarkerOffset(3.0) {
-                + IntakeDoorOpenCmd()
-            }
-            UNSTABLE_addTemporalMarkerOffset(3.5) {
-                + IntakeDoorCloseCmd()
-            }
-            lineToConstantHeading(Vector2d(-7.3, -7.8))
-
-            UNSTABLE_addTemporalMarkerOffset(3.0) {
-                + LiftGoToPositionCmd(200)
-            }
-
-            UNSTABLE_addTemporalMarkerOffset(4.0) {
-                + BoxArmPositionCmd(0.6)
-            }
+            lineToConstantHeading(Vector2d(-22.3, -6.1))
             splineToConstantHeading(Vector2d(50.2, -34.8), Math.toRadians(270.0))
-
-            UNSTABLE_addTemporalMarkerOffset(0.0) {
-                + BoxLeftDoorOpenCmd()
-            }
-            UNSTABLE_addTemporalMarkerOffset(1.8) {
-                + BoxArmDownCmd()
-                + BoxLeftDoorCloseCmd()
-                + LiftGoToPositionCmd(0)
-            }
             waitSeconds(2.0)
         }
     }
