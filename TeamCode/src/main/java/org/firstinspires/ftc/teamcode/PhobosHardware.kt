@@ -45,7 +45,7 @@ class PhobosHardware : SimpleHardware() {
         depositRight.gobilda()
 
         planeLauncher.gobilda()
-        planeLauncher.position = 0.0
+        planeLauncher.position = 0.2
 
         hang.zeroPowerBehavior = DcMotor.ZeroPowerBehavior.BRAKE
     }

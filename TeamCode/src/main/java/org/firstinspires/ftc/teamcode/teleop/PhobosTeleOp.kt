@@ -72,8 +72,8 @@ class PhobosTeleOp : PhobosOpMode() {
         )
 
         superGamepad2.scheduleOn(Button.LEFT_BUMPER,
-            DeltaInstantCmd { hardware.planeLauncher.position = 1.0 },
-            DeltaInstantCmd { hardware.planeLauncher.position = 0.0 }
+            DeltaInstantCmd { hardware.planeLauncher.position = 0.0 },
+            DeltaInstantCmd { hardware.planeLauncher.position = 0.2 }
         )
 
         /* START B */
