@@ -18,3 +18,6 @@ open class IntakeArmWristPositionCmd(val position: Double) : DeltaCommand() {
     }
 
 }
+
+class IntakeArmWristTiltInCmd : IntakeArmWristPositionCmd(0.42)
+class IntakeArmWristTiltOutCmd : IntakeArmWristPositionCmd(0.6)

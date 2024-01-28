@@ -7,7 +7,10 @@ import com.github.serivesmejia.deltacommander.DeltaCommand
 import com.qualcomm.robotcore.util.ElapsedTime
 import com.qualcomm.robotcore.util.Range
 
-open class IntakeArmGoToPositionCmd(val position: Int) : DeltaCommand() {
+open class IntakeArmGoToPositionCmd(
+    val position: Int,
+    val wristPositionCmd: IntakeArmWristPositionCmd? = null
+) : DeltaCommand() {
 
     val sub = require<IntakeArmSubsystem>()
 
@@ -20,7 +23,7 @@ open class IntakeArmGoToPositionCmd(val position: Int) : DeltaCommand() {
 
     override fun run() {
         if(start == null) {
-            start = sub.armMotor.currentPosition.toDouble();
+            start = sub.armMotor.currentPosition.toDouble()
         }
 
         t += 1.0
@@ -29,6 +32,8 @@ open class IntakeArmGoToPositionCmd(val position: Int) : DeltaCommand() {
         sub.controller.targetPosition = lerp(start!!, position.toDouble(), t / 50)
 
         sub.updateController()
+
+        wristPositionCmd?.run()
     }
 
     override fun end(interrupted: Boolean) {

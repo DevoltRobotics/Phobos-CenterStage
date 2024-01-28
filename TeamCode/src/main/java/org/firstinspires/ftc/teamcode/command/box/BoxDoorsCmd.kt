@@ -39,4 +39,4 @@ class BoxRightDoorCloseCmd : BoxRightDoorPositionCmd(BoxSubsystem.rightClosePos)
 class BoxLeftDoorCloseCmd : BoxLeftDoorPositionCmd(BoxSubsystem.leftClosePos)
 
 class BoxDoorsOpenCmd : BoxDoorsPositionCmd(BoxSubsystem.leftOpenPos, BoxSubsystem.rightOpenPos)
-class BoxDoorsCloseCmd : BoxDoorsPositionCmd(BoxSubsystem.rightOpenPos, BoxSubsystem.leftOpenPos)
+class BoxDoorsCloseCmd : BoxDoorsPositionCmd(BoxSubsystem.leftClosePos, BoxSubsystem.rightClosePos)

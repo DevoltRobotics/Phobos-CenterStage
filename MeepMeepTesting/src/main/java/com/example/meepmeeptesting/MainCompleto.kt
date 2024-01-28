@@ -18,12 +18,11 @@ fun main() {
                 drive.trajectorySequenceBuilder(Pose2d(10.0, -59.0, Math.toRadians(90.0))).apply {
                     path( // B
                             backdropPixelScoreY = -34.8,
-                            spikeMarkPixelScorePose = Pose2d(23.0, -44.0, Math.toRadians(90.0)),
+                            spikeMarkPixelScorePose = Pose2d(33.0, -28.0, Math.toRadians(180.0)),
                             firstTrussCrossPath = {
-                                setReversed(true)
-                                splineToConstantHeading(Vector2d(10.0, -35.0), Math.toRadians(180.0))
-
-                                splineToConstantHeading(Vector2d(-33.0, -35.0), Math.toRadians(180.0))
+                                lineToConstantHeading(Vector2d(35.0, -45.0))
+                                lineToConstantHeading(Vector2d(5.0, -35.0))
+                                lineToConstantHeading(Vector2d(-22.0, -35.0))
                             }
                     )
                 }.build()
@@ -78,7 +77,7 @@ private fun TrajectorySequenceBuilder.path(
             }
 
             firstTrussCrossPath()
-            splineToSplineHeading(Pose2d(-56.0, -11.5, Math.toRadians(180.0)), Math.toRadians(180.0))
+            splineToConstantHeading(Vector2d(-56.0, -11.5), Math.toRadians(180.0))
         } else {
             lineToConstantHeading(Vector2d(-32.5, -34.0))
             splineToConstantHeading(Vector2d(-56.0, -11.5), Math.toRadians(180.0))

@@ -1,7 +1,9 @@
 package org.firstinspires.ftc.teamcode.auto.red
 
+import com.acmerobotics.roadrunner.drive.Drive
 import com.acmerobotics.roadrunner.geometry.Pose2d
 import com.acmerobotics.roadrunner.geometry.Vector2d
+import com.github.serivesmejia.deltacommander.dsl.deltaSequence
 import com.github.serivesmejia.deltacommander.endRightAway
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous
 import org.firstinspires.ftc.teamcode.Alliance
@@ -13,17 +15,23 @@ import org.firstinspires.ftc.teamcode.command.box.BoxDoorsCloseCmd
 import org.firstinspires.ftc.teamcode.command.box.BoxDoorsOpenCmd
 import org.firstinspires.ftc.teamcode.command.box.BoxLeftDoorCloseCmd
 import org.firstinspires.ftc.teamcode.command.box.BoxLeftDoorOpenCmd
+import org.firstinspires.ftc.teamcode.command.box.BoxRightDoorCloseCmd
 import org.firstinspires.ftc.teamcode.command.intake.IntakeDoorCloseCmd
 import org.firstinspires.ftc.teamcode.command.intake.IntakeDoorOpenCmd
 import org.firstinspires.ftc.teamcode.command.intake.arm.IntakeArmGoToPositionCmd
 import org.firstinspires.ftc.teamcode.command.intake.arm.IntakeArmWristPositionCmd
+import org.firstinspires.ftc.teamcode.command.intake.arm.IntakeArmWristTiltInCmd
+import org.firstinspires.ftc.teamcode.command.intake.arm.IntakeArmWristTiltOutCmd
 import org.firstinspires.ftc.teamcode.command.lift.LiftGoToPositionCmd
 import org.firstinspires.ftc.teamcode.command.mecanum.IntakeAbsorbCmd
 import org.firstinspires.ftc.teamcode.command.mecanum.IntakeReleaseCmd
 import org.firstinspires.ftc.teamcode.command.mecanum.IntakeStopCmd
+import org.firstinspires.ftc.teamcode.rr.drive.DriveConstants
+import org.firstinspires.ftc.teamcode.rr.drive.SampleMecanumDrive
 import org.firstinspires.ftc.teamcode.rr.trajectorysequence.TrajectorySequenceBuilder
 import org.firstinspires.ftc.teamcode.vision.Pattern
 import org.firstinspires.ftc.teamcode.vision.Pattern.*
+import java.util.Vector
 
 @Autonomous(name = "R - Derecha Completo", group ="###RFINAL")
 class AutoRedRightCompleto : PhobosAuto(Alliance.RED) {
@@ -34,31 +42,29 @@ class AutoRedRightCompleto : PhobosAuto(Alliance.RED) {
         when(pattern) {
             A -> path( // B
                 backdropPixelScoreY = -34.8,
-                spikeMarkPixelScorePose = Pose2d(23.0, -44.0, Math.toRadians(90.0)),
+                spikeMarkPixelScorePose = Pose2d(33.0, -28.0, Math.toRadians(180.0)),
                 firstTrussCrossPath = {
-                    setReversed(true)
-                    splineToConstantHeading(Vector2d(10.0, -33.0), Math.toRadians(180.0))
-
-                    splineToConstantHeading(Vector2d(-33.0, -33.0), Math.toRadians(180.0))
+                    lineToConstantHeading(Vector2d(35.0, -45.0))
+                    lineToConstantHeading(Vector2d(8.0, -34.0))
+                    lineToConstantHeading(Vector2d(-22.0, -35.0))
                 }
             )
             C -> path( // B
                 backdropPixelScoreY = -34.8,
-                spikeMarkPixelScorePose = Pose2d(23.0, -44.0, Math.toRadians(90.0)),
+                spikeMarkPixelScorePose = Pose2d(33.0, -28.0, Math.toRadians(180.0)),
                 firstTrussCrossPath = {
-                    setReversed(true)
-                    splineToConstantHeading(Vector2d(10.0, -33.0), Math.toRadians(180.0))
-                    splineToConstantHeading(Vector2d(-33.0, -33.0), Math.toRadians(180.0))
+                    lineToConstantHeading(Vector2d(35.0, -45.0))
+                    lineToConstantHeading(Vector2d(8.0, -35.0))
+                    lineToConstantHeading(Vector2d(-22.0, -35.0))
                 }
             )
             else -> path( // B
                 backdropPixelScoreY = -34.8,
-                spikeMarkPixelScorePose = Pose2d(23.0, -44.0, Math.toRadians(90.0)),
+                spikeMarkPixelScorePose = Pose2d(33.0, -28.0, Math.toRadians(180.0)),
                 firstTrussCrossPath = {
-                    setReversed(true)
-                    splineToConstantHeading(Vector2d(10.0, -33.0), Math.toRadians(180.0))
-
-                    splineToConstantHeading(Vector2d(-33.0, -33.0), Math.toRadians(180.0))
+                    lineToConstantHeading(Vector2d(35.0, -45.0))
+                    lineToConstantHeading(Vector2d(8.0, -35.0))
+                    lineToConstantHeading(Vector2d(-22.0, -35.0))
                 }
             )
         }
@@ -71,8 +77,7 @@ class AutoRedRightCompleto : PhobosAuto(Alliance.RED) {
         firstTrussCrossPath: TrajectorySequenceBuilder.() -> Unit
     ) {
         UNSTABLE_addTemporalMarkerOffset(0.0) {
-            + IntakeArmWristPositionCmd(0.42).endRightAway()
-            + BoxLeftDoorCloseCmd()
+            + IntakeArmWristTiltInCmd().endRightAway()
         }
 
         UNSTABLE_addTemporalMarkerOffset(1.5) {
@@ -103,40 +108,91 @@ class AutoRedRightCompleto : PhobosAuto(Alliance.RED) {
 
         repeat(cycles) {
             // cycle
-            if (it == 0) {
+            if (it == 0) { // spike mark pixel
                 UNSTABLE_addTemporalMarkerOffset(1.0) {
-                    + IntakeArmGoToPositionCmd(-230)
+                    + IntakeArmGoToPositionCmd(-220)
                 }
 
                 lineToSplineHeading(spikeMarkPixelScorePose)
 
-                UNSTABLE_addTemporalMarkerOffset(0.0) {
-                    + IntakeArmWristPositionCmd(0.6).endRightAway()
+                UNSTABLE_addTemporalMarkerOffset(0.3) {
+                    + IntakeArmWristTiltOutCmd().endRightAway()
                     + IntakeReleaseCmd()
                 }
 
-                UNSTABLE_addTemporalMarkerOffset(1.0) {
+                UNSTABLE_addTemporalMarkerOffset(1.3) {
                     + IntakeStopCmd()
-                    + IntakeArmGoToPositionCmd(0)
+                    + IntakeArmGoToPositionCmd(0, IntakeArmWristTiltInCmd())
                 }
 
-                waitSeconds(1.5)
+                waitSeconds(1.5) // FIRST STACK GRAB
 
                 firstTrussCrossPath()
-                splineToSplineHeading(
-                    Pose2d(-56.0, -11.5, Math.toRadians(180.0)),
+
+                UNSTABLE_addTemporalMarkerOffset(-0.3) {
+                    + IntakeArmGoToPositionCmd(-280, IntakeArmWristPositionCmd(0.56))
+                }
+
+                splineToConstantHeading( // proceed to grab
+                    Vector2d(-58.0, -11.5),
                     Math.toRadians(180.0)
                 )
+
+                UNSTABLE_addTemporalMarkerOffset(0.0) {
+                    + IntakeArmGoToPositionCmd(-260, IntakeArmWristPositionCmd(0.56))
+                }
+                lineToConstantHeading(Vector2d(-50.6, -11.5))
+
+                UNSTABLE_addTemporalMarkerOffset(0.0) {
+                    + IntakeAbsorbCmd()
+                    + IntakeArmGoToPositionCmd(-320, IntakeArmWristPositionCmd(0.56))
+                }
+                lineToConstantHeading(Vector2d(-58.0, -11.5), SampleMecanumDrive.getVelocityConstraint(
+                    DriveConstants.MAX_VEL * 0.6, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH
+                ), SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL * 0.6))
             } else {
-                lineToConstantHeading(Vector2d(-32.5, -26.0))
-                splineToConstantHeading(Vector2d(-56.0, -11.5), Math.toRadians(180.0))
+                // TODO: Intake grab
+                lineToConstantHeading(Vector2d(-32.5, -26.0)) // align to truss
+                splineToConstantHeading(Vector2d(-52.8, -9.5), Math.toRadians(180.0)) // proceed to grab
             }
 
-            waitSeconds(2.0)
+            UNSTABLE_addTemporalMarkerOffset(1.4) { // Prepare for passthrough
+                + IntakeReleaseCmd()
+                + IntakeArmGoToPositionCmd(0, IntakeArmWristTiltInCmd())
+            }
 
-            lineToConstantHeading(Vector2d(-22.3, -6.1))
-            splineToConstantHeading(Vector2d(50.2, -34.8), Math.toRadians(270.0))
-            waitSeconds(2.0)
+            waitSeconds(1.4)
+
+            UNSTABLE_addTemporalMarkerOffset(1.2) { // Pixel passthrough
+                + IntakeDoorOpenCmd()
+                + IntakeStopCmd()
+            }
+            UNSTABLE_addTemporalMarkerOffset(1.6) {
+                + IntakeDoorCloseCmd()
+            }
+
+            lineToConstantHeading(Vector2d(-22.3, -6.1)) // Align to cross stage door
+
+            UNSTABLE_addTemporalMarkerOffset(0.1) {
+                + LiftGoToPositionCmd(220)
+            }
+            UNSTABLE_addTemporalMarkerOffset(1.3) {
+                + BoxArmMiddleCmd()
+            }
+
+            splineToConstantHeading(Vector2d(51.2, -34.8), Math.toRadians(270.0)) // Align to backdrop
+
+            UNSTABLE_addTemporalMarkerOffset(1.0) {
+                + BoxDoorsOpenCmd()
+            }
+            UNSTABLE_addTemporalMarkerOffset(2.5) {
+                + BoxDoorsCloseCmd()
+                + BoxArmDownCmd()
+            }
+            UNSTABLE_addTemporalMarkerOffset(2.8) {
+                + LiftGoToPositionCmd(0)
+            }
+            waitSeconds(2.9)
         }
     }
 
