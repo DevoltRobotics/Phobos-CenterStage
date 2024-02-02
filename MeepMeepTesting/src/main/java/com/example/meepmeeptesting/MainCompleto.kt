@@ -15,14 +15,14 @@ fun main() {
             .setColorScheme(ColorSchemeBlueDark())
             .setConstraints(60.0, 60.0, Math.toRadians(180.0), Math.toRadians(180.0), 17.5)
             .followTrajectorySequence { drive: DriveShim ->
-                drive.trajectorySequenceBuilder(Pose2d(10.0, -59.0, Math.toRadians(90.0))).apply {
-                    path( // B
-                            backdropPixelScoreY = -34.8,
-                            spikeMarkPixelScorePose = Pose2d(33.0, -28.0, Math.toRadians(180.0)),
+                drive.trajectorySequenceBuilder(Pose2d(10.0, 59.0, Math.toRadians(270.0))).apply {
+                    path(
+                            backdropPixelScoreY = 34.8,
+                            spikeMarkPixelScorePose = Pose2d(33.0, 28.0, Math.toRadians(180.0)),
                             firstTrussCrossPath = {
-                                lineToConstantHeading(Vector2d(35.0, -45.0))
-                                lineToConstantHeading(Vector2d(5.0, -35.0))
-                                lineToConstantHeading(Vector2d(-22.0, -35.0))
+                                lineToConstantHeading(Vector2d(35.0, 48.0))
+                                lineToConstantHeading(Vector2d(8.0, 34.0))
+                                lineToConstantHeading(Vector2d(-22.0, 33.0))
                             }
                     )
                 }.build()
@@ -39,76 +39,48 @@ fun main() {
 
 
 private fun TrajectorySequenceBuilder.path(
-        cycles: Int = 2,
+        cycles: Int = 1,
         backdropPixelScoreY: Double = -34.8,
         spikeMarkPixelScorePose: Pose2d,
         firstTrussCrossPath: TrajectorySequenceBuilder.() -> Unit
 ) {
-    UNSTABLE_addTemporalMarkerOffset(0.0) {
-    }
-
-    UNSTABLE_addTemporalMarkerOffset(1.0) {
-    }
-
-    splineToSplineHeading(Pose2d(50.2, backdropPixelScoreY, Math.toRadians(180.0)), Math.toRadians(0.0))
-
-    UNSTABLE_addTemporalMarkerOffset(0.0) {
-    }
-
-    UNSTABLE_addTemporalMarkerOffset(2.0) {
-    }
+    splineToSplineHeading(
+            Pose2d(51.2, backdropPixelScoreY, Math.toRadians(180.0)),
+            Math.toRadians(0.0)
+    )
+    waitSeconds(1.5)
 
     repeat(cycles) {
-        waitSeconds(2.0)
-
         // cycle
-        if(it == 0) {
-            UNSTABLE_addTemporalMarkerOffset(0.0) {
-            }
-
+        if (it == 0) { // spike mark pixel
             lineToSplineHeading(spikeMarkPixelScorePose)
 
-            UNSTABLE_addTemporalMarkerOffset(0.0) {
-            }
-
-            waitSeconds(1.5)
-
-            UNSTABLE_addTemporalMarkerOffset(0.0) {
-            }
+            waitSeconds(1.9) // FIRST STACK GRAB
 
             firstTrussCrossPath()
-            splineToConstantHeading(Vector2d(-56.0, -11.5), Math.toRadians(180.0))
+
+            splineToConstantHeading( // proceed to grab
+                    Vector2d(-60.0, 13.5),
+                    Math.toRadians(180.0)
+            )
+
+            lineToLinearHeading(Pose2d(-50.0, 11.5, Math.toRadians(115.0)))
+
+            lineToLinearHeading(Pose2d(-57.8, 11.5, Math.toRadians(180.0)))
+
+            lineToLinearHeading(Pose2d(-59.0, 11.5, Math.toRadians(180.0)))
         } else {
-            lineToConstantHeading(Vector2d(-32.5, -34.0))
-            splineToConstantHeading(Vector2d(-56.0, -11.5), Math.toRadians(180.0))
+            // TODO: Intake grab
+            lineToConstantHeading(Vector2d(-32.5, 26.0)) // align to truss
+            splineToConstantHeading(Vector2d(-52.8, 9.5), Math.toRadians(180.0)) // proceed to grab
         }
 
-        UNSTABLE_addTemporalMarkerOffset(0.0) {
-        }
-        UNSTABLE_addTemporalMarkerOffset(0.2) {
-        }
-        waitSeconds(2.0)
+        waitSeconds(1.4)
 
-        UNSTABLE_addTemporalMarkerOffset(0.0) {
-        }
+        lineToConstantHeading(Vector2d(-22.3, 6.1)) // Align to cross stage door
 
-        UNSTABLE_addTemporalMarkerOffset(3.0) {
-        }
-        UNSTABLE_addTemporalMarkerOffset(3.5) {
-        }
-        lineToConstantHeading(Vector2d(-7.3, -7.8))
+        splineToConstantHeading(Vector2d(50.0, 35.2), Math.toRadians(270.0)) // Align to backdrop
 
-        UNSTABLE_addTemporalMarkerOffset(3.0) {
-        }
-
-        UNSTABLE_addTemporalMarkerOffset(4.0) {
-        }
-        splineToConstantHeading(Vector2d(50.2, -34.8), Math.toRadians(270.0))
-
-        UNSTABLE_addTemporalMarkerOffset(0.0) {
-        }
-        UNSTABLE_addTemporalMarkerOffset(1.8) {
-        }
-        waitSeconds(2.0)
+        waitSeconds(2.9)
     }
 }
