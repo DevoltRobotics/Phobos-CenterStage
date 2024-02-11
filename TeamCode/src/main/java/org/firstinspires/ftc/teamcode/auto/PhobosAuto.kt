@@ -18,13 +18,11 @@ import org.openftc.easyopencv.OpenCvCameraFactory
 import org.openftc.easyopencv.OpenCvCameraRotation
 import org.openftc.easyopencv.OpenCvWebcam
 
-abstract class PhobosAuto(val alliance: Alliance) : PhobosOpMode() {
+abstract class PhobosAuto(val alliance: Alliance, var pipeline: TeamElementDetectionPipeline? = null) : PhobosOpMode() {
 
     val drive get() = hardware.drive
 
     open val startPose = Pose2d()
-
-    lateinit var pipeline: TeamElementDetectionPipeline
 
     lateinit var camera: OpenCvWebcam
         private set
@@ -34,17 +32,19 @@ abstract class PhobosAuto(val alliance: Alliance) : PhobosOpMode() {
 
         camera = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName::class.java, "Webcam 1"))
 
-        pipeline = when(alliance) {
-            Alliance.RED -> RedTeamElementDetectionPipeline()
-            Alliance.BLUE -> BlueTeamElementDetectionPipeline()
+        if(pipeline == null) {
+            pipeline = when (alliance) {
+                Alliance.RED -> RedTeamElementDetectionPipeline()
+                Alliance.BLUE -> BlueTeamElementDetectionPipeline()
+            }
         }
 
-        camera.setPipeline(pipeline)
+        camera.setPipeline(pipeline!!)
         camera.setMillisecondsPermissionTimeout(4000)
 
         camera.openCameraDeviceAsync(object: AsyncCameraOpenListener {
             override fun onOpened() {
-                camera.startStreaming(320, 240, OpenCvCameraRotation.UPSIDE_DOWN)
+                camera.startStreaming(320, 240, OpenCvCameraRotation.UPRIGHT)
 
                 FtcDashboard.getInstance().startCameraStream(camera, 0.0)
             }
@@ -55,7 +55,7 @@ abstract class PhobosAuto(val alliance: Alliance) : PhobosOpMode() {
     }
 
     override fun initializeUpdate() {
-        telemetry.addData("Pattern", pipeline.analysis)
+        telemetry.addData("Pattern", pipeline!!.analysis)
         telemetry.update()
     }
 
@@ -64,7 +64,7 @@ abstract class PhobosAuto(val alliance: Alliance) : PhobosOpMode() {
 
         drive.poseEstimate = startPose
 
-        drive.followTrajectorySequenceAsync(sequence(pipeline.analysis))
+        drive.followTrajectorySequenceAsync(sequence(pipeline!!.analysis))
 
         + DeltaRunCmd {
             lastKnownAlliance = alliance

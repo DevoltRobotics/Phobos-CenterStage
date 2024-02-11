@@ -8,10 +8,9 @@ import org.opencv.core.Point;
 import org.opencv.core.Rect;
 import org.opencv.core.Scalar;
 import org.opencv.imgproc.Imgproc;
-import org.openftc.easyopencv.OpenCvPipeline;
 
 @Config
-public class BlueTeamElementDetectionPipeline extends TeamElementDetectionPipeline {
+public class BlueCompletoTeamElementDetectionPipeline extends TeamElementDetectionPipeline {
 
     /*
      * Some color constants
@@ -19,11 +18,11 @@ public class BlueTeamElementDetectionPipeline extends TeamElementDetectionPipeli
     static final Scalar BLUE = new Scalar(0, 0, 255);
     static final Scalar GREEN = new Scalar(0, 255, 0);
 
-    public static int region1X = 120;
+    public static int region1X = 20;
     public static int region1Y = 95;
 
-    public static int region2X = 245;
-    public static int region2Y = 98;
+    public static int region2X = 155;
+    public static int region2Y = 90;
 
     /*
      * The core values which define the location and size of the sample regions
@@ -181,7 +180,7 @@ public class BlueTeamElementDetectionPipeline extends TeamElementDetectionPipeli
          */
         if(avg1 >= (100f)) // Was it from region 1?
         {
-            position = Pattern.B; // Record our analysis
+            position = Pattern.A; // Record our analysis
 
             /*
              * Draw a solid rectangle on top of the chosen region.
@@ -196,7 +195,7 @@ public class BlueTeamElementDetectionPipeline extends TeamElementDetectionPipeli
         }
         else if(avg2  >= (100f)) // Was it from region 2?
         {
-            position = Pattern.C; // Record our analysis
+            position = Pattern.B; // Record our analysis
 
             /*
              * Draw a solid rectangle on top of the chosen region.
@@ -211,7 +210,7 @@ public class BlueTeamElementDetectionPipeline extends TeamElementDetectionPipeli
         }
         else // Was it from region 3?
         {
-            position = Pattern.A; // Record our analysis
+            position = Pattern.C; // Record our analysis
         }
 
         /*

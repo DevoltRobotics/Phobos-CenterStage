@@ -18,6 +18,8 @@ import org.firstinspires.ftc.teamcode.command.intake.IntakeDoorOpenCmd
 import org.firstinspires.ftc.teamcode.command.intake.arm.IntakeArmDriveCmd
 import org.firstinspires.ftc.teamcode.command.intake.arm.IntakeArmGoToPositionCmd
 import org.firstinspires.ftc.teamcode.command.intake.arm.IntakeArmWristPositionCmd
+import org.firstinspires.ftc.teamcode.command.intake.arm.IntakeArmWristTiltInCmd
+import org.firstinspires.ftc.teamcode.command.intake.arm.IntakeArmWristTiltOutCmd
 import org.firstinspires.ftc.teamcode.command.lift.LiftDriveCmd
 import org.firstinspires.ftc.teamcode.command.lift.LiftGoToPositionCmd
 import org.firstinspires.ftc.teamcode.command.mecanum.FieldCentricMecanumCmd
@@ -72,8 +74,8 @@ class PhobosTeleOp : PhobosOpMode() {
         )
 
         superGamepad2.scheduleOn(Button.LEFT_BUMPER,
-            DeltaInstantCmd { hardware.planeLauncher.position = 0.0 },
-            DeltaInstantCmd { hardware.planeLauncher.position = 0.2 }
+            DeltaInstantCmd { hardware.planeLauncher.position = 0.4 },
+            DeltaInstantCmd { hardware.planeLauncher.position = 0.0 }
         )
 
         /* START B */
@@ -100,8 +102,8 @@ class PhobosTeleOp : PhobosOpMode() {
         )
 
         superGamepad2.toggleScheduleOn(Button.B,
-                IntakeArmWristPositionCmd(0.42).endRightAway(),
-                IntakeArmWristPositionCmd(0.54).endRightAway()
+                IntakeArmWristTiltInCmd().endRightAway(),
+                IntakeArmWristTiltOutCmd().endRightAway()
         )
 
         // LIFT
@@ -158,7 +160,7 @@ class PhobosTeleOp : PhobosOpMode() {
             telemetry.addData("pose", hardware.drive.poseEstimate)
 
             telemetry.addData("lift target", liftSub.controller.targetPosition)
-            telemetry.addData("lift", liftSub.leftMotor.currentPosition)
+            telemetry.addData("lift pos", liftSub.leftMotor.currentPosition)
 
             telemetry.addData("arm", hardware.intakeArm.power)
             telemetry.addData("arm target", intakeArmSub.controller.targetPosition)

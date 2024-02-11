@@ -33,15 +33,15 @@ class AutoBlueRight2 : PhobosAuto(Alliance.BLUE) {
                 waitBeforeFirstDrive = 0.8,
 
                 pixelSpikeLeavePose = Pose2d(-45.0, 5.0, Math.toRadians(0.0)),
-                backdropScorePose = Pose2d(55.0, 39.0, Math.toRadians(180.0)),
+                backdropScorePose = Pose2d(55.0, 38.0, Math.toRadians(180.0)),
                 parkVector = Vector2d(53.0, 25.0)
             )
 
             Pattern.B -> path( // B
-                spikeMarkAlignPose = Pose2d(-35.0, 9.0, Math.toRadians(90.0)),
-                pixelSpikeLeavePose = Pose2d(-35.0, 4.0, Math.toRadians(91.0)),
-                backdropScorePose = Pose2d(54.7, 32.0, Math.toRadians(180.0)),
-                parkVector = Vector2d(54.0, 26.0)
+                spikeMarkAlignPose = Pose2d(-35.0, 9.0, Math.toRadians(270.0)),
+                pixelSpikeLeavePose = Pose2d(-35.0, 6.0, Math.toRadians(90.0)),
+                backdropScorePose = Pose2d(57.0, 31.0, Math.toRadians(180.0)),
+                parkVector = Vector2d(54.0, 23.0)
             )
 
             Pattern.C -> path( // A
@@ -50,7 +50,8 @@ class AutoBlueRight2 : PhobosAuto(Alliance.BLUE) {
                 backdropScorePose = Pose2d(56.5, 23.0, Math.toRadians(180.0)),
                 parkVector = Vector2d(54.0, 23.0),
 
-                armDownTicks = -225
+                waitBeforeFirstDrive = 1.0,
+                armDownTicks = -210
             )
         }
     }.build()
@@ -63,7 +64,7 @@ class AutoBlueRight2 : PhobosAuto(Alliance.BLUE) {
 
             waitBeforeFirstDrive: Double? = null,
             armDownTimeOffset: Double = 2.0,
-            armDownTicks: Int = -230
+            armDownTicks: Int = -205
     ) {
         UNSTABLE_addTemporalMarkerOffset(0.0) {
             + IntakeArmWristPositionCmd(0.42).endRightAway()
@@ -80,12 +81,15 @@ class AutoBlueRight2 : PhobosAuto(Alliance.BLUE) {
         lineToSplineHeading(spikeMarkAlignPose)
 
         UNSTABLE_addTemporalMarkerOffset(-0.3) {
-            + IntakeArmWristPositionCmd(0.59).endRightAway()
+            + IntakeArmWristPositionCmd(0.56).endRightAway()
             + IntakeReleaseCmd()
         }
 
-        UNSTABLE_addTemporalMarkerOffset(1.0) {
+        UNSTABLE_addTemporalMarkerOffset(0.5) {
             + IntakeStopCmd()
+        }
+
+        UNSTABLE_addTemporalMarkerOffset(1.0) {
             + IntakeArmGoToPositionCmd(0)
         }
         waitSeconds(0.8)
@@ -96,7 +100,7 @@ class AutoBlueRight2 : PhobosAuto(Alliance.BLUE) {
 
         UNSTABLE_addTemporalMarkerOffset(2.0) {
             + deltaSequence {
-                - LiftGoToPositionCmd(280).async()
+                - LiftGoToPositionCmd(180).async()
                 - waitForSeconds(0.15)
 
                 - waitForSeconds(1.0)

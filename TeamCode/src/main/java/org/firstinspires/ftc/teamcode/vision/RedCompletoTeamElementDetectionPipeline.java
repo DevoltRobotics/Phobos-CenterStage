@@ -8,10 +8,9 @@ import org.opencv.core.Point;
 import org.opencv.core.Rect;
 import org.opencv.core.Scalar;
 import org.opencv.imgproc.Imgproc;
-import org.openftc.easyopencv.OpenCvPipeline;
 
 @Config
-public class BlueTeamElementDetectionPipeline extends TeamElementDetectionPipeline {
+public class RedCompletoTeamElementDetectionPipeline extends TeamElementDetectionPipeline {
 
     /*
      * Some color constants
@@ -19,11 +18,11 @@ public class BlueTeamElementDetectionPipeline extends TeamElementDetectionPipeli
     static final Scalar BLUE = new Scalar(0, 0, 255);
     static final Scalar GREEN = new Scalar(0, 255, 0);
 
-    public static int region1X = 120;
-    public static int region1Y = 95;
+    public static int region1X = 115;
+    public static int region1Y = 90;
 
-    public static int region2X = 245;
-    public static int region2Y = 98;
+    public static int region2X = 250;
+    public static int region2Y = 100;
 
     /*
      * The core values which define the location and size of the sample regions
@@ -65,11 +64,11 @@ public class BlueTeamElementDetectionPipeline extends TeamElementDetectionPipeli
             REGION2_TOPLEFT_ANCHOR_POINT.y + REGION_HEIGHT);
 
     public static double hMin = 0;
-    public static double sMin = 50;
+    public static double sMin = 135;
     public static double vMin = 0;
 
     public static double hMax = 255;
-    public static double sMax = 110;
+    public static double sMax = 200;
     public static double vMax = 255;
 
     static Scalar redHsvMin = new Scalar(hMin, sMin, vMin, 0);
@@ -179,7 +178,7 @@ public class BlueTeamElementDetectionPipeline extends TeamElementDetectionPipeli
          * Now that we found the max, we actually need to go and
          * figure out which sample region that value was from
          */
-        if(avg1 >= (100f)) // Was it from region 1?
+        if(avg1 >= (255f / 2)) // Was it from region 1?
         {
             position = Pattern.B; // Record our analysis
 
@@ -194,7 +193,7 @@ public class BlueTeamElementDetectionPipeline extends TeamElementDetectionPipeli
                     GREEN, // The color the rectangle is drawn in
                     -1); // Negative thickness means solid fill
         }
-        else if(avg2  >= (100f)) // Was it from region 2?
+        else if(avg2  >= (255f / 2)) // Was it from region 2?
         {
             position = Pattern.C; // Record our analysis
 

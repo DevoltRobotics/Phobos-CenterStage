@@ -29,7 +29,7 @@ class FieldCentricMecanumCmd(val gamepad: Gamepad, val applyTurboWithTriggers: B
         sub.drive.setWeightedDrivePower(
                 Pose2d(
                         input.x, input.y,
-                        (-gamepad.right_stick_x).toDouble() * turbo
+                        (-gamepad.right_stick_x).toDouble() * turbo * 0.8
                 )
         )
     }
