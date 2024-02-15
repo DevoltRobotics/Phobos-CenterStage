@@ -38,10 +38,10 @@ class AutoBlueRight2 : PhobosAuto(Alliance.BLUE) {
             )
 
             Pattern.B -> path( // B
-                spikeMarkAlignPose = Pose2d(-35.0, 9.0, Math.toRadians(270.0)),
-                pixelSpikeLeavePose = Pose2d(-35.0, 6.0, Math.toRadians(90.0)),
-                backdropScorePose = Pose2d(57.0, 31.0, Math.toRadians(180.0)),
-                parkVector = Vector2d(54.0, 23.0)
+                    spikeMarkAlignPose = Pose2d(-35.0, 9.0, Math.toRadians(90.0)),
+                    pixelSpikeLeavePose = Pose2d(-35.0, 6.0, Math.toRadians(90.0)),
+                    backdropScorePose = Pose2d(57.0, 31.0, Math.toRadians(180.0)),
+                    parkVector = Vector2d(54.0, 23.0)
             )
 
             Pattern.C -> path( // A
@@ -51,7 +51,7 @@ class AutoBlueRight2 : PhobosAuto(Alliance.BLUE) {
                 parkVector = Vector2d(54.0, 23.0),
 
                 waitBeforeFirstDrive = 1.0,
-                armDownTicks = -210
+                spikeMarkArmPos = -210
             )
         }
     }.build()
@@ -59,19 +59,19 @@ class AutoBlueRight2 : PhobosAuto(Alliance.BLUE) {
     fun TrajectorySequenceBuilder.path(
             spikeMarkAlignPose: Pose2d,
             pixelSpikeLeavePose: Pose2d,
+            spikeMarkArmPos: Int = -230,
             backdropScorePose: Pose2d,
             parkVector: Vector2d,
 
             waitBeforeFirstDrive: Double? = null,
-            armDownTimeOffset: Double = 2.0,
-            armDownTicks: Int = -205
+            armDownTimeOffset: Double = 2.0
     ) {
         UNSTABLE_addTemporalMarkerOffset(0.0) {
             + IntakeArmWristPositionCmd(0.42).endRightAway()
         }
 
         UNSTABLE_addTemporalMarkerOffset(armDownTimeOffset) {
-            + IntakeArmGoToPositionCmd(armDownTicks)
+            + IntakeArmGoToPositionCmd(spikeMarkArmPos)
         }
 
         if(waitBeforeFirstDrive != null && waitBeforeFirstDrive > 0.0) {
@@ -80,18 +80,16 @@ class AutoBlueRight2 : PhobosAuto(Alliance.BLUE) {
 
         lineToSplineHeading(spikeMarkAlignPose)
 
-        UNSTABLE_addTemporalMarkerOffset(-0.3) {
+        UNSTABLE_addTemporalMarkerOffset(0.0) {
             + IntakeArmWristPositionCmd(0.56).endRightAway()
             + IntakeReleaseCmd()
         }
 
-        UNSTABLE_addTemporalMarkerOffset(0.5) {
-            + IntakeStopCmd()
-        }
-
         UNSTABLE_addTemporalMarkerOffset(1.0) {
+            + IntakeStopCmd()
             + IntakeArmGoToPositionCmd(0)
         }
+
         waitSeconds(0.8)
         lineToLinearHeading(pixelSpikeLeavePose)
         waitSeconds(2.0)
